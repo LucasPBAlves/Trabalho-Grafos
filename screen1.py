@@ -1,9 +1,9 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 
-
 class Screen1(QDialog):
     backSignal = pyqtSignal()
+    nextSignal = pyqtSignal()  # Adicionado o sinal para navegação para a próxima tela
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -34,14 +34,13 @@ class Screen1(QDialog):
 
         buttonsLayout = QHBoxLayout()
 
-        # Botão Voltar - conectado para emitir backSignal
         backButton = QPushButton("Voltar", self)
-        backButton.clicked.connect(self.backSignal.emit)  # Emitir o sinal ao clicar
+        backButton.clicked.connect(self.backSignal.emit)
         buttonsLayout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignLeft)
 
         self.nextButton = QPushButton("Próximo", self)
-        self.nextButton.clicked.connect(self.gotoNextScreen)
-        self.nextButton.setEnabled(False)  # Desabilitado até um grafo válido ser criado
+        self.nextButton.clicked.connect(self.nextSignal.emit)
+        self.nextButton.setEnabled(False)
         buttonsLayout.addWidget(self.nextButton, alignment=Qt.AlignmentFlag.AlignRight)
 
         layout.addLayout(buttonsLayout)
@@ -60,8 +59,3 @@ class Screen1(QDialog):
         except ValueError:
             self.statusMessage.setText("Por favor, insira um número válido de vértices.")
             self.nextButton.setEnabled(False)
-
-    def gotoNextScreen(self):
-        # Implemente a lógica de transição para a Screen2
-        print("Transição para a Screen2")
-

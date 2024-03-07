@@ -1,19 +1,19 @@
 import sys
-
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QSpacerItem, QSizePolicy, QHBoxLayout, QStackedWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QFont, QIcon
-from styles import DARK_THEME_STYLE
-import warnings
-# Importe suas telas aqui
-from screen1 import Screen1
 
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+# Importações das telas
+from screen1 import Screen1
+from screen2 import Screen2
+from screen3 import Screen3
+# Adicione imports adicionais para Screen4 até Screen12 conforme necessário
+
+from styles import DARK_THEME_STYLE
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.currentScreenIndex = {}  # Para gerenciar os índices das telas
         self.initUI()
 
     def initUI(self):
@@ -25,37 +25,40 @@ class MainWindow(QMainWindow):
         self.stackedWidget = QStackedWidget()
         self.setCentralWidget(self.stackedWidget)
 
-        self.setupInitialScreen()
-        self.setupScreen1()  # Preparar a Screen1 e adicionar ao QStackedWidget
+        self.setup_initial_screen()
+        self.setup_screen1()
+        self.setup_screen2()
+        self.setup_screen3()
+        # Continue a adicionar as telas conforme necessário
 
-    def setupInitialScreen(self):
-        initialWidget = QWidget()
-        layout = QVBoxLayout(initialWidget)
+    def setup_initial_screen(self):
+        initial_widget = QWidget()
+        layout = QVBoxLayout(initial_widget)
 
-        title = QLabel('Implementação de Grafos', initialWidget)
+        title = QLabel('Implementação de Grafos', initial_widget)
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         title.setStyleSheet("font-size: 24pt; font-weight: bold; font-family: Arial;")
         layout.addWidget(title)
 
         layout.addItem(QSpacerItem(15, 30, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed))
 
-        manip_subtitle = QLabel('Escolha uma opção:', initialWidget)
+        manip_subtitle = QLabel('Escolha uma opção:', initial_widget)
         manip_subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(manip_subtitle)
 
         # Botões centralizados
         buttons_layout = QVBoxLayout()
-        createGraphButton = QPushButton("Criação de um grafo com X vértices", initialWidget)
-        createGraphButton.clicked.connect(lambda: self.gotoScreen('Screen1'))
-        createGraphButton.setMinimumHeight(40)
-        createGraphButton.setMaximumWidth(400)
-        buttons_layout.addWidget(createGraphButton)
+        create_graph_button = QPushButton("Criação de um grafo com X vértices", initial_widget)
+        create_graph_button.clicked.connect(lambda: self.goto_screen(1))
+        create_graph_button.setMinimumHeight(40)
+        create_graph_button.setMaximumWidth(400)
+        buttons_layout.addWidget(create_graph_button)
 
-        usePredefinedGraphButton = QPushButton("Usar grafos já plotados", initialWidget)
-        usePredefinedGraphButton.clicked.connect(self.notImplementedYet)
-        usePredefinedGraphButton.setMinimumHeight(40)
-        usePredefinedGraphButton.setMaximumWidth(400)
-        buttons_layout.addWidget(usePredefinedGraphButton)
+        use_predefined_graph_button = QPushButton("Usar grafos já plotados", initial_widget)
+        use_predefined_graph_button.clicked.connect(self.not_implemented_yet)
+        use_predefined_graph_button.setMinimumHeight(40)
+        use_predefined_graph_button.setMaximumWidth(400)
+        buttons_layout.addWidget(use_predefined_graph_button)
 
         h_layout = QHBoxLayout()
         h_layout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
@@ -63,28 +66,36 @@ class MainWindow(QMainWindow):
         h_layout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         layout.addLayout(h_layout)
 
-        self.stackedWidget.addWidget(initialWidget)
-        self.currentScreenIndex['InitialScreen'] = 0  # Índice da tela inicial
+        self.stackedWidget.addWidget(initial_widget)
 
-    def setupScreen1(self):
-        # Supondo que Screen1 esteja corretamente definida para funcionar com QStackedWidget
+    def setup_screen1(self):
         self.screen1 = Screen1()
+        self.screen1.nextSignal.connect(lambda: self.goto_screen(2))
         self.stackedWidget.addWidget(self.screen1)
-        self.currentScreenIndex['Screen1'] = self.stackedWidget.count() - 1
 
-    def returnToInitialScreen(self):
-        self.stackedWidget.setCurrentIndex(0)
-    def gotoScreen(self, screenName):
-        if screenName in self.currentScreenIndex:
-            self.stackedWidget.setCurrentIndex(self.currentScreenIndex[screenName])
+    # Dentro de MainWindow.py
+    def setup_screen2(self):
+        self.screen2 = Screen2()
+        self.screen2.nextSignal.connect(
+            lambda: self.goto_screen(3))  # Isso requer que 'goto_screen' possa lidar com índices
+        self.stackedWidget.addWidget(self.screen2)
 
-    def returnToInitialScreen(self):
-        self.stackedWidget.setCurrentIndex(self.currentScreenIndex['InitialScreen'])
-    def notImplementedYet(self):
+    def setup_screen3(self):
+        self.screen3 = Screen3()
+        self.screen3.backSignal.connect(lambda: self.goto_screen(2))  # Exemplo para voltar à Screen2
+        self.screen3.nextSignal.connect(lambda: self.goto_screen(4))  # Exemplo para ir à Screen4, se aplicável
+        self.stackedWidget.addWidget(self.screen3)
+
+    # Métodos setup_screen4() até setup_screen12() conforme necessário
+
+    def goto_screen(self, screen_index):
+        self.stackedWidget.setCurrentIndex(screen_index)
+
+    def not_implemented_yet(self):
         print("Função não implementada")
 
 if __name__ == '__main__':
-    app = QApplication([])
+    app = QApplication(sys.argv)
     mainWindow = MainWindow()
     mainWindow.show()
     sys.exit(app.exec())

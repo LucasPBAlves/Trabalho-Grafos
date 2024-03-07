@@ -1,8 +1,9 @@
-# screen2.py
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
 
 class Screen2(QDialog):
+    nextSignal = pyqtSignal()  # Corrigindo a definição do sinal
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Definição do tipo de grafo")
@@ -12,14 +13,18 @@ class Screen2(QDialog):
     def initUI(self):
         layout = QVBoxLayout()
 
-        # Exemplo de um widget adicional, pode ser um texto ou qualquer coisa relacionada a esta tela
         label = QLabel("Definição do tipo de grafo", self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
+        # Potencialmente, um botão "Próximo"
+        nextButton = QPushButton("Próximo", self)
+        nextButton.clicked.connect(self.nextSignal.emit)  # Emitir nextSignal quando clicado
+        layout.addWidget(nextButton, alignment=Qt.AlignmentFlag.AlignRight)
+
         # Botão Voltar
         backButton = QPushButton("Voltar", self)
-        backButton.clicked.connect(self.close)
-        layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
+        backButton.clicked.connect(self.close)  # Potencialmente, alterar para emitir um sinal de volta
+        layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignLeft)
 
         self.setLayout(layout)
