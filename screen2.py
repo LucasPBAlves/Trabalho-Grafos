@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt, pyqtSignal
 
 class Screen2(QDialog):
+    backSignal = pyqtSignal()  # Adicionando sinal para a ação de voltar
     nextSignal = pyqtSignal()  # Corrigindo a definição do sinal
 
     def __init__(self, parent=None):
@@ -24,7 +25,7 @@ class Screen2(QDialog):
 
         # Botão Voltar
         backButton = QPushButton("Voltar", self)
-        backButton.clicked.connect(self.close)  # Potencialmente, alterar para emitir um sinal de volta
+        backButton.clicked.connect(self.backSignal.emit)  # Agora emite backSignal em vez de fechar a janela
         layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignLeft)
 
         self.setLayout(layout)

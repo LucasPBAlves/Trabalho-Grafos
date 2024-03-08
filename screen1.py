@@ -1,16 +1,16 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt, pyqtSignal
+
 
 class Screen1(QDialog):
     backSignal = pyqtSignal()
-    nextSignal = pyqtSignal()  # Adicionado o sinal para navegação para a próxima tela
+    nextSignal = pyqtSignal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Criação de um grafo com X vértices")
         self.setGeometry(100, 100, 600, 400)
-        self.vertices = 0
-        self.graph_representation = []
+        self.vertices = 0  # Inicializa o contador de vértices
         self.initUI()
 
     def initUI(self):
@@ -37,9 +37,9 @@ class Screen1(QDialog):
         backButton = QPushButton("Voltar", self)
         backButton.clicked.connect(self.backSignal.emit)
         buttonsLayout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignLeft)
-
+        self.statusMessage.setText("Insira um valor válido (>0) de vértices para continuar.")
         self.nextButton = QPushButton("Próximo", self)
-        self.nextButton.clicked.connect(self.nextSignal.emit)
+        self.nextButton.clicked.connect(self.gotoNextScreen)
         self.nextButton.setEnabled(False)
         buttonsLayout.addWidget(self.nextButton, alignment=Qt.AlignmentFlag.AlignRight)
 
@@ -59,3 +59,9 @@ class Screen1(QDialog):
         except ValueError:
             self.statusMessage.setText("Por favor, insira um número válido de vértices.")
             self.nextButton.setEnabled(False)
+
+    def gotoNextScreen(self):
+        if self.vertices > 0:
+            self.nextSignal.emit()
+        else:
+            self.statusMessage.setText("Insira um valor válido (>0) de vértices para continuar.")

@@ -70,14 +70,15 @@ class MainWindow(QMainWindow):
 
     def setup_screen1(self):
         self.screen1 = Screen1()
+        self.screen1.backSignal.connect(lambda: self.goto_screen(0))
         self.screen1.nextSignal.connect(lambda: self.goto_screen(2))
         self.stackedWidget.addWidget(self.screen1)
 
     # Dentro de MainWindow.py
     def setup_screen2(self):
         self.screen2 = Screen2()
-        self.screen2.nextSignal.connect(
-            lambda: self.goto_screen(3))  # Isso requer que 'goto_screen' possa lidar com índices
+        self.screen2.backSignal.connect(lambda: self.goto_screen(1))
+        self.screen2.nextSignal.connect(lambda: self.goto_screen(3))  # Isso requer que 'goto_screen' possa lidar com índices
         self.stackedWidget.addWidget(self.screen2)
 
     def setup_screen3(self):
