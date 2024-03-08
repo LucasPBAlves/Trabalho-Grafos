@@ -8,12 +8,16 @@ class Screen1(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.graph_representation = None
+        self.nextButton = None
+        self.statusMessage = None
+        self.verticesInput = None
         self.setWindowTitle("Criação de um grafo com X vértices")
         self.setGeometry(100, 100, 600, 400)
         self.vertices = 0  # Inicializa o contador de vértices
-        self.initUI()
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         layout = QVBoxLayout()
 
         label = QLabel("Insira o número de vértices do grafo:", self)
@@ -24,29 +28,29 @@ class Screen1(QDialog):
         self.verticesInput.setPlaceholderText("Número de vértices")
         layout.addWidget(self.verticesInput)
 
-        addVerticesButton = QPushButton("Adicionar Vértices", self)
-        addVerticesButton.clicked.connect(self.createGraph)
-        layout.addWidget(addVerticesButton)
+        add_vertices_button = QPushButton("Adicionar Vértices", self)
+        add_vertices_button.clicked.connect(self.create_graph)
+        layout.addWidget(add_vertices_button)
 
         self.statusMessage = QLabel("", self)
         self.statusMessage.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.statusMessage)
 
-        buttonsLayout = QHBoxLayout()
+        buttons_layout = QHBoxLayout()
 
-        backButton = QPushButton("Voltar", self)
-        backButton.clicked.connect(self.backSignal.emit)
-        buttonsLayout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignLeft)
+        back_button = QPushButton("Voltar", self)
+        back_button.clicked.connect(self.backSignal.emit)
+        buttons_layout.addWidget(back_button, alignment=Qt.AlignmentFlag.AlignLeft)
         self.statusMessage.setText("Insira um valor válido (>0) de vértices para continuar.")
         self.nextButton = QPushButton("Próximo", self)
-        self.nextButton.clicked.connect(self.gotoNextScreen)
+        self.nextButton.clicked.connect(self.goto_next_screen)
         self.nextButton.setEnabled(False)
-        buttonsLayout.addWidget(self.nextButton, alignment=Qt.AlignmentFlag.AlignRight)
+        buttons_layout.addWidget(self.nextButton, alignment=Qt.AlignmentFlag.AlignRight)
 
-        layout.addLayout(buttonsLayout)
+        layout.addLayout(buttons_layout)
         self.setLayout(layout)
 
-    def createGraph(self):
+    def create_graph(self):
         try:
             self.vertices = int(self.verticesInput.text())
             if self.vertices > 0:
@@ -60,7 +64,7 @@ class Screen1(QDialog):
             self.statusMessage.setText("Por favor, insira um número válido de vértices.")
             self.nextButton.setEnabled(False)
 
-    def gotoNextScreen(self):
+    def goto_next_screen(self):
         if self.vertices > 0:
             self.nextSignal.emit()
         else:
