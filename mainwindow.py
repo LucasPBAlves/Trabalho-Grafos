@@ -6,10 +6,10 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPu
     QSizePolicy, QHBoxLayout, QStackedWidget
 
 # Importações das telas
-from screen1 import Screen1
-from screen2 import Screen2
-from screen3 import Screen3
-from screen4 import Screen4
+from telas.screen1 import Screen1
+from telas.screen2 import Screen2
+from telas.screen3 import Screen3
+from telas.screen4 import Screen4
 
 from styles import DARK_THEME_STYLE
 

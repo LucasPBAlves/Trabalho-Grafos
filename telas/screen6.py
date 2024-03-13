@@ -2,7 +2,7 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt
 
-from screen1 import Screen1
+from telas.screen1 import Screen1
 
 
 class Screen6(QDialog):
