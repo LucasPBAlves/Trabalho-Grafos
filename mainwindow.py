@@ -6,8 +6,8 @@ from PyQt6.QtGui import QFont, QIcon
 # Importações das telas
 from screen1 import Screen1
 from screen2 import Screen2
+# Certifique-se de que as classes Screen3 etc. estão corretamente definidas e importadas
 from screen3 import Screen3
-# Adicione imports adicionais para Screen4 até Screen12 conforme necessário
 
 from styles import DARK_THEME_STYLE
 
@@ -28,8 +28,7 @@ class MainWindow(QMainWindow):
         self.setup_initial_screen()
         self.setup_screen1()
         self.setup_screen2()
-        self.setup_screen3()
-        # Continue a adicionar as telas conforme necessário
+        # Screen3 será configurada sob demanda
 
     def setup_initial_screen(self):
         initial_widget = QWidget()
@@ -46,7 +45,6 @@ class MainWindow(QMainWindow):
         manip_subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(manip_subtitle)
 
-        # Botões centralizados
         buttons_layout = QVBoxLayout()
         create_graph_button = QPushButton("Criação de um grafo com X vértices", initial_widget)
         create_graph_button.clicked.connect(lambda: self.goto_screen(1))
@@ -70,24 +68,21 @@ class MainWindow(QMainWindow):
 
     def setup_screen1(self):
         self.screen1 = Screen1()
-        self.screen1.backSignal.connect(lambda: self.goto_screen(0))
         self.screen1.nextSignal.connect(lambda: self.goto_screen(2))
         self.stackedWidget.addWidget(self.screen1)
 
-    # Dentro de MainWindow.py
     def setup_screen2(self):
         self.screen2 = Screen2()
-        self.screen2.backSignal.connect(lambda: self.goto_screen(1))
-        self.screen2.nextSignal.connect(lambda: self.goto_screen(3))  # Isso requer que 'goto_screen' possa lidar com índices
+        self.screen2.nextSignal.connect(self.prepare_screen3)
         self.stackedWidget.addWidget(self.screen2)
 
-    def setup_screen3(self):
-        self.screen3 = Screen3()
-        self.screen3.backSignal.connect(lambda: self.goto_screen(2))  # Exemplo para voltar à Screen2
-        self.screen3.nextSignal.connect(lambda: self.goto_screen(4))  # Exemplo para ir à Screen4, se aplicável
-        self.stackedWidget.addWidget(self.screen3)
-
-    # Métodos setup_screen4() até setup_screen12() conforme necessário
+    def prepare_screen3(self):
+        # Prepara e exibe a Screen3
+        if not hasattr(self, 'screen3'):
+            self.screen3 = Screen3()
+            self.screen3.backSignal.connect(lambda: self.goto_screen(2))
+            self.stackedWidget.addWidget(self.screen3)
+        self.stackedWidget.setCurrentWidget(self.screen3)
 
     def goto_screen(self, screen_index):
         self.stackedWidget.setCurrentIndex(screen_index)
