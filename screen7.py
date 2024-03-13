@@ -2,6 +2,9 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt
 
+from screen1 import Screen1
+
+
 class Screen7(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -23,3 +26,13 @@ class Screen7(QDialog):
         layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.setLayout(layout)
+
+    def is_simple(self):
+        self.screen1 = Screen1()
+        for i in range(self.vertice):
+            for j in range(self.vertice):
+                if i == j and self.screen1.graph_representation[i][j] != 0:
+                    return False
+                if self.screen1.graph_representation[i][j] > 1:
+                    return False
+        return True

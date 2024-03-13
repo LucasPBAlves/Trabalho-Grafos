@@ -2,6 +2,9 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt
 
+from screen1 import Screen1
+
+
 class Screen11(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -23,3 +26,8 @@ class Screen11(QDialog):
         layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.setLayout(layout)
+
+    def imprimir_matriz(self):
+            self.screen1 = Screen1()
+            for linha in self.screen1.graph_representation:
+                print(linha)
