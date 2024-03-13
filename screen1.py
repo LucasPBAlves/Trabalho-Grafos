@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt, pyqtSignal
-
+from shared_state import SharedState
 
 class Screen1(QDialog):
     backSignal = pyqtSignal()
@@ -8,13 +8,8 @@ class Screen1(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.graph_representation = None
-        self.nextButton = None
-        self.statusMessage = None
-        self.verticesInput = None
         self.setWindowTitle("Criação de um grafo com X vértices")
         self.setGeometry(100, 100, 600, 400)
-        self.vertices = 0  # Inicializa o contador de vértices
         self.init_ui()
 
     def init_ui(self):
@@ -41,7 +36,7 @@ class Screen1(QDialog):
         back_button = QPushButton("Voltar", self)
         back_button.clicked.connect(self.backSignal.emit)
         buttons_layout.addWidget(back_button, alignment=Qt.AlignmentFlag.AlignLeft)
-        self.statusMessage.setText("Insira um valor válido (>0) de vértices para continuar.")
+
         self.nextButton = QPushButton("Próximo", self)
         self.nextButton.clicked.connect(self.goto_next_screen)
         self.nextButton.setEnabled(False)
@@ -52,10 +47,10 @@ class Screen1(QDialog):
 
     def create_graph(self):
         try:
-            self.vertices = int(self.verticesInput.text())
-            if self.vertices > 0:
-                self.graph_representation = [[0 for _ in range(self.vertices)] for _ in range(self.vertices)]
-                self.statusMessage.setText(f"Grafo criado com {self.vertices} vértices.")
+            vertices = int(self.verticesInput.text())
+            if vertices > 0:
+                SharedState.setVerticesCount(vertices)  # Atualiza o SharedState
+                self.statusMessage.setText(f"Grafo criado com {vertices} vértices.")
                 self.nextButton.setEnabled(True)
             else:
                 self.statusMessage.setText("Por favor, insira um número positivo de vértices.")
@@ -65,7 +60,9 @@ class Screen1(QDialog):
             self.nextButton.setEnabled(False)
 
     def goto_next_screen(self):
-        if self.vertices > 0:
+        # Se você precisar do valor em outra tela, use SharedState.getVerticesCount()
+        if SharedState.getVerticesCount() > 0:
+            print(SharedState.vertices_count)
             self.nextSignal.emit()
         else:
             self.statusMessage.setText("Insira um valor válido (>0) de vértices para continuar.")
