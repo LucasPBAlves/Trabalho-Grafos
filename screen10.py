@@ -2,6 +2,8 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt
 
+
+
 class Screen10(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -23,3 +25,5 @@ class Screen10(QDialog):
         layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.setLayout(layout)
+
+

@@ -1,6 +1,8 @@
 # screen8.py
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt
+from screen6 import Screen6
+
 
 class Screen8(QDialog):
     def __init__(self, parent=None):
@@ -23,3 +25,11 @@ class Screen8(QDialog):
         layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.setLayout(layout)
+
+    def is_regular(self):
+        self.screen6 = Screen6()
+        grau_base = self.screen6.grau_vertice(0)
+        for i in range(1, self.vertice):
+            if self.screen6.grau_vertice(i) != grau_base:
+                return False
+        return True

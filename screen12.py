@@ -23,3 +23,7 @@ class Screen12(QDialog):
         layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.setLayout(layout)
+
+    def imprimir_lista(self):
+        for vertice, vizinhos in self.lista_adjacencia.items():
+            print(f"{vertice}: {vizinhos}")
