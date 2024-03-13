@@ -3,18 +3,18 @@ from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdi
 from PyQt6.QtCore import Qt, pyqtSignal
 from shared_state import SharedState
 
+
 class Screen3(QDialog):
     backSignal = pyqtSignal()
     nextSignal = pyqtSignal()
 
     def __init__(self, parent=None):
-        print("Tela3")
         super().__init__(parent)
         self.setWindowTitle("Criação e remoção de arestas")
         self.setGeometry(100, 100, 600, 400)
         self.edges = []  # Lista para armazenar as arestas
-        self.vertices= SharedState.getVerticesCount()
-        self.maxEdges = self.vertices
+        self.uniqueVertices = set()  # Conjunto para armazenar vértices únicos
+        self.vertices = SharedState.getVerticesCount()  # Total de vértices permitidos
         self.isDirected = SharedState.getIsDirected()
         self.initUI()
 
@@ -25,9 +25,9 @@ class Screen3(QDialog):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-        self.remainingEdgesLabel = QLabel(f"Arestas restantes: {self.maxEdges}", self)
-        self.remainingEdgesLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.remainingEdgesLabel)
+        self.remainingVerticesLabel = QLabel(f"Vértices restantes: {self.vertices - len(self.uniqueVertices)}", self)
+        self.remainingVerticesLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.remainingVerticesLabel)
 
         self.edgesList = QListWidget(self)
         layout.addWidget(self.edgesList)
@@ -71,16 +71,17 @@ class Screen3(QDialog):
             QMessageBox.warning(self, "Entrada Inválida", "Por favor, insira ambos os vértices para a aresta.")
             return
         edge = f"{v1}->{v2}" if self.isDirected or v1 <= v2 else f"{v2}->{v1}"
-        if edge in self.edges:
-            QMessageBox.warning(self, "Aresta Duplicada", "Esta aresta já foi adicionada.")
+        if edge in self.edges or (not self.isDirected and f"{v2}->{v1}" in self.edges):
+            QMessageBox.warning(self, "Aresta Duplicada", "Esta aresta já foi adicionada ou é inválida.")
             return
+
         self.edges.append(edge)
         self.edgesList.addItem(edge)
-        self.maxEdges -= 1
-        self.remainingEdgesLabel.setText(f"Arestas restantes: {self.maxEdges}")
+        self.uniqueVertices.update([v1, v2])
+        self.remainingVerticesLabel.setText(f"Vértices restantes: {self.vertices - len(self.uniqueVertices)}")
         self.vertex1Input.clear()
         self.vertex2Input.clear()
-        self.nextButton.setEnabled(self.maxEdges == 0)
+        self.checkIfComplete()
 
     def removeSelectedEdge(self):
         selectedItems = self.edgesList.selectedItems()
@@ -88,8 +89,21 @@ class Screen3(QDialog):
             return
         for item in selectedItems:
             edge = item.text()
+            v1, v2 = edge.split("->")
             self.edges.remove(edge)
             self.edgesList.takeItem(self.edgesList.row(item))
-            self.maxEdges += 1
-        self.remainingEdgesLabel.setText(f"Arestas restantes: {self.maxEdges}")
-        self.nextButton.setEnabled(self.maxEdges == 0)
+            # Atualiza os vértices únicos após a remoção
+            self.updateUniqueVerticesAfterRemoval(v1, v2)
+        self.remainingVerticesLabel.setText(f"Vértices restantes: {self.vertices - len(self.uniqueVertices)}")
+        self.checkIfComplete()
+
+    def updateUniqueVerticesAfterRemoval(self, v1, v2):
+        # Atualizar a lista de vértices únicos após a remoção de uma aresta
+        for vertex in [v1, v2]:
+            if all(vertex not in edge.split("->") for edge in self.edges):
+                self.uniqueVertices.discard(vertex)
+
+    def checkIfComplete(self):
+        # Habilita o botão Próximo apenas se todos os vértices únicos foram adicionados
+        self.nextButton.setEnabled(len(self.uniqueVertices) == self.vertices)
+
