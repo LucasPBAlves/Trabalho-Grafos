@@ -68,13 +68,13 @@ class Screen2(QDialog):
         self.setLayout(layout)
 
     def setGraphType(self, isDirected):
-        SharedState.setIsDirected(isDirected)  # Atualiza SharedState com a escolha do usuário
+        SharedState.set_is_directed(isDirected)  # Atualiza SharedState com a escolha do usuário
         self.nextButton.setEnabled(True)
         choiceText = "Tipo de grafo selecionado: Direcionado" if isDirected else "Tipo de grafo selecionado: Não Direcionado"
         self.choiceLabel.setText(choiceText)
 
     def gotoNextScreen(self):
-        if SharedState.getIsDirected() is not None:
+        if SharedState.get_is_directed() is not None:
             print(SharedState.is_directed)
             self.nextSignal.emit()
         else:

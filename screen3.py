@@ -14,8 +14,8 @@ class Screen3(QDialog):
         self.setGeometry(100, 100, 600, 400)
         self.edges = []  # Lista para armazenar as arestas
         self.uniqueVertices = set()  # Conjunto para armazenar vértices únicos
-        self.vertices = SharedState.getVerticesCount()  # Total de vértices permitidos
-        self.isDirected = SharedState.getIsDirected()
+        self.vertices = SharedState.get_vertices_count()  # Total de vértices permitidos
+        self.isDirected = SharedState.get_is_directed()
         self.initUI()
 
     def initUI(self):
@@ -106,4 +106,12 @@ class Screen3(QDialog):
     def checkIfComplete(self):
         # Habilita o botão Próximo apenas se todos os vértices únicos foram adicionados
         self.nextButton.setEnabled(len(self.uniqueVertices) == self.vertices)
+# Continuação da classe Screen3
+
+    def gotoNextScreen(self):
+        if self.nextButton.isEnabled():
+            # Aqui você pode adicionar qualquer lógica adicional necessária antes de mudar de tela
+            self.nextSignal.emit()
+        else:
+            QMessageBox.warning(self, "Ação Inválida", "Adicione todas as arestas necessárias antes de prosseguir.")
 

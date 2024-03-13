@@ -1,6 +1,8 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QApplication
 from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout
+
 from shared_state import SharedState
+
 
 class Screen1(QDialog):
     backSignal = pyqtSignal()
@@ -8,6 +10,8 @@ class Screen1(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.nextButton = None
+        self.verticesInput = None
         self.setWindowTitle("Criação de um grafo com X vértices")
         self.setGeometry(100, 100, 600, 400)
         self.init_ui()
@@ -49,7 +53,7 @@ class Screen1(QDialog):
         try:
             vertices = int(self.verticesInput.text())
             if vertices > 0:
-                SharedState.setVerticesCount(vertices)  # Atualiza o SharedState
+                SharedState.set_vertices_count(vertices)  # Atualiza o SharedState
                 self.statusMessage.setText(f"Grafo criado com {vertices} vértices.")
                 self.nextButton.setEnabled(True)
             else:
@@ -61,7 +65,7 @@ class Screen1(QDialog):
 
     def goto_next_screen(self):
         # Se você precisar do valor em outra tela, use SharedState.getVerticesCount()
-        if SharedState.getVerticesCount() > 0:
+        if SharedState.get_vertices_count() > 0:
             print(SharedState.vertices_count)
             self.nextSignal.emit()
         else:

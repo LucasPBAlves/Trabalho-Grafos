@@ -1,22 +1,30 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QSpacerItem, QSizePolicy, QHBoxLayout, QStackedWidget
+
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QFont, QIcon
+from PyQt6.QtGui import QIcon
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QSpacerItem, \
+    QSizePolicy, QHBoxLayout, QStackedWidget
 
 # Importações das telas
 from screen1 import Screen1
 from screen2 import Screen2
-# Certifique-se de que as classes Screen3 etc. estão corretamente definidas e importadas
 from screen3 import Screen3
+from screen4 import Screen4
 
 from styles import DARK_THEME_STYLE
+
+
+def not_implemented_yet():
+    print("Função não implementada")
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.stackedWidget = None
+        self.init_ui()
 
-    def initUI(self):
+    def init_ui(self):
         self.setWindowTitle('Grafos')
         self.setGeometry(350, 100, 1280, 720)
         self.setStyleSheet(DARK_THEME_STYLE)
@@ -53,7 +61,7 @@ class MainWindow(QMainWindow):
         buttons_layout.addWidget(create_graph_button)
 
         use_predefined_graph_button = QPushButton("Usar grafos já plotados", initial_widget)
-        use_predefined_graph_button.clicked.connect(self.not_implemented_yet)
+        use_predefined_graph_button.clicked.connect(not_implemented_yet)
         use_predefined_graph_button.setMinimumHeight(40)
         use_predefined_graph_button.setMaximumWidth(400)
         buttons_layout.addWidget(use_predefined_graph_button)
@@ -74,21 +82,28 @@ class MainWindow(QMainWindow):
     def setup_screen2(self):
         self.screen2 = Screen2()
         self.screen2.nextSignal.connect(self.prepare_screen3)
+        self.screen2.backSignal.connect(lambda: self.goto_screen(1))
         self.stackedWidget.addWidget(self.screen2)
 
     def prepare_screen3(self):
-        # Prepara e exibe a Screen3
         if not hasattr(self, 'screen3'):
             self.screen3 = Screen3()
-            self.screen3.backSignal.connect(lambda: self.goto_screen(2))
+            self.screen3.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen2)))
+            self.screen3.nextSignal.connect(self.prepare_screen4)
             self.stackedWidget.addWidget(self.screen3)
         self.stackedWidget.setCurrentWidget(self.screen3)
+
+    def prepare_screen4(self):
+        if not hasattr(self, 'screen4'):
+            self.screen4 = Screen4()
+            self.screen4.backSignal.connect(
+                lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen3)))  # Retornar para Screen3
+            self.stackedWidget.addWidget(self.screen4)
+        self.stackedWidget.setCurrentWidget(self.screen4)
 
     def goto_screen(self, screen_index):
         self.stackedWidget.setCurrentIndex(screen_index)
 
-    def not_implemented_yet(self):
-        print("Função não implementada")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
