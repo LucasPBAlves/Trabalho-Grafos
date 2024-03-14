@@ -91,15 +91,14 @@ class MainWindow(QMainWindow):
             self.screen3.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen2)))
             self.screen3.nextSignal.connect(self.prepare_screen4)
             self.stackedWidget.addWidget(self.screen3)
-        self.stackedWidget.setCurrentWidget(self.screen3)
+            self.stackedWidget.setCurrentWidget(self.screen3)
 
     def prepare_screen4(self):
         if not hasattr(self, 'screen4'):
             self.screen4 = Screen4()
-            self.screen4.backSignal.connect(
-                lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen3)))  # Retornar para Screen3
+            #self.screen4.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen3)))
             self.stackedWidget.addWidget(self.screen4)
-        self.stackedWidget.setCurrentWidget(self.screen4)
+            self.stackedWidget.setCurrentWidget(self.screen4)
 
     def goto_screen(self, screen_index):
         self.stackedWidget.setCurrentIndex(screen_index)
