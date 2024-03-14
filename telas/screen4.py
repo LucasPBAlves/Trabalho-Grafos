@@ -1,61 +1,44 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox
-from PyQt6.QtCore import Qt
-from telas.screen1 import Screen1
+from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QPushButton)
+from PyQt6.QtCore import pyqtSignal
+from shared_state import SharedState
 
+class Screen4(QWidget):
+    backSignal = pyqtSignal()
+    actionSignal = pyqtSignal(str)  # sinal para a ação dos botões
 
-class Screen4(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Identificação da vizinhança de um vértice")
-        self.setGeometry(100, 100, 600, 400)  # Tamanho e posição da janela
+        self.setWindowTitle("Menu de Operações")
         self.initUI()
 
     def initUI(self):
-        layout = QVBoxLayout()
+        layout = QVBoxLayout(self)
 
-        # Título da tela
-        label = QLabel("Identificação da vizinhança de um vértice", self)
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(label)
+        # Condicionalmente adicionar botões com base no tipo de grafo
+        isDirected = SharedState.get_is_directed()
 
-        # Campo de entrada para o vértice desejado
-        self.vertice_input = QLineEdit(self)
-        layout.addWidget(self.vertice_input)
+        if not isDirected:
+            self.addButton(layout, "Identificação da vizinhança de um vértice",)
+        if isDirected:
+            self.addButton(layout, "Identificação dos sucessores e predecessores de um vértice")
 
-        # Botão para identificar os vizinhos
-        vizinhosButton = QPushButton("Identificar Vizinhos", self)
-        vizinhosButton.clicked.connect(self.identificar_vizinhos)
-        layout.addWidget(vizinhosButton)
+        # Botões que aparecem independentemente do tipo de grafo
+        self.addButton(layout, "Identificação do grau de um determinado vértice")
+        self.addButton(layout, "Testar se o grafo é simples")
+        self.addButton(layout, "Testar se o grafo é regular")
+        self.addButton(layout, "Testar se o grafo é completo")
+        self.addButton(layout, "Testar se o grafo é bipartido")
+        self.addButton(layout, "Representação de grafos utilizando Matriz de Adjacência")
+        self.addButton(layout, "Representação de grafos utilizando Lista de Adjacência")
 
-        # Botão Voltar
         backButton = QPushButton("Voltar", self)
-        backButton.clicked.connect(self.close)
-        layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
+        backButton.clicked.connect(self.backSignal.emit)
+        layout.addWidget(backButton)
 
-        self.setLayout(layout)
+    def addButton(self, layout, text):
+        button = QPushButton(text, self)
+        button.clicked.connect(lambda checked, b=text: self.buttonClicked(b))
+        layout.addWidget(button)
 
-    def vizinhanca_vertice(self, vertice):
-
-        vizinhanca = []
-        self.screen1 = Screen1()
-        for i in range(self.vertice):
-            if self.screen1.graph_representation[vertice][i] == 1:
-                vizinhanca.append(i)
-        return vizinhanca
-
-    def identificar_vizinhos(self):
-        # Obter o vértice inserido pelo usuário
-        vertice = self.vertice_input.text()
-
-        # Verificar se o vértice inserido é um número inteiro
-        try:
-            vertice = int(vertice)
-        except ValueError:
-            QMessageBox.warning(self, "Erro", "Insira um número inteiro válido para o vértice.")
-            return
-
-        # Chamar o método de identificação de vizinhos da classe MatrizAdjacencia
-        vizinhanca = self.vizinhanca_vertice(vertice)
-
-        # Exibir a lista de vizinhos em uma caixa de diálogo
-        QMessageBox.information(self, "Vizinhos", f"Os vizinhos do vértice {vertice} são: {vizinhanca}")
+    def buttonClicked(self, buttonText):
+        self.actionSignal.emit(buttonText)

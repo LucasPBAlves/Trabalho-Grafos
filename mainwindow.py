@@ -93,10 +93,11 @@ class MainWindow(QMainWindow):
             self.stackedWidget.addWidget(self.screen3)
             self.stackedWidget.setCurrentWidget(self.screen3)
 
+
     def prepare_screen4(self):
         if not hasattr(self, 'screen4'):
             self.screen4 = Screen4()
-            #self.screen4.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen3)))
+            self.screen4.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen3)))
             self.stackedWidget.addWidget(self.screen4)
             self.stackedWidget.setCurrentWidget(self.screen4)
 
