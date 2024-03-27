@@ -3,7 +3,7 @@ from PyQt6.QtCore import Qt
 from telas.screen1 import Screen1
 
 
-class Screen4(QDialog):
+class Screen5(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Identificação da vizinhança de um vértice")

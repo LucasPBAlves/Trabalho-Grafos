@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 from telas.screen6 import Screen6
 
 
-class Screen8(QDialog):
+class Screen9(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Testar se o grafo é regular")

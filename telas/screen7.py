@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from telas.screen1 import Screen1
 
 
-class Screen6(QDialog):
+class Screen7(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Identificação do grau de um vértice")

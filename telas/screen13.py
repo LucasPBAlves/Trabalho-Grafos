@@ -2,7 +2,7 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
 from PyQt6.QtCore import Qt
 
-class Screen12(QDialog):
+class Screen13(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Representação de grafos utilizando Lista de Adjacência")

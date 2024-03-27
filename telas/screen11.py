@@ -4,7 +4,7 @@ from PyQt6.QtCore import Qt
 
 
 
-class Screen10(QDialog):
+class Screen11(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Testar se o grafo é bipartido")

@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from telas.screen1 import Screen1
 
 
-class Screen11(QDialog):
+class Screen12(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Representação de grafos utilizando Matriz de Adjacência")

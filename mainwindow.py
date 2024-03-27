@@ -4,14 +4,14 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QSpacerItem, \
     QSizePolicy, QHBoxLayout, QStackedWidget
+from styles import DARK_THEME_STYLE
 
 # Importações das telas
 from telas.screen1 import Screen1
 from telas.screen2 import Screen2
 from telas.screen3 import Screen3
 from telas.screen4 import Screen4
-
-from styles import DARK_THEME_STYLE
+from telas.screen5 import Screen5
 
 
 def not_implemented_yet():
@@ -93,13 +93,22 @@ class MainWindow(QMainWindow):
             self.stackedWidget.addWidget(self.screen3)
             self.stackedWidget.setCurrentWidget(self.screen3)
 
-
     def prepare_screen4(self):
         if not hasattr(self, 'screen4'):
             self.screen4 = Screen4()
             self.screen4.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen3)))
             self.stackedWidget.addWidget(self.screen4)
+            self.screen4.nextSignal.connect(self.prepare_menu)
             self.stackedWidget.setCurrentWidget(self.screen4)
+
+    def prepare_menu(self, screen_id):
+        print(screen_id)
+        # Aqui você prepara e exibe a tela correspondente ao ID recebido
+        if screen_id == 5:
+            if not hasattr(self, 'screen5'):
+                self.screen5 = Screen5()
+                self.stackedWidget.addWidget(self.screen5)
+                self.stackedWidget.setCurrentWidget(self.screen5)
 
     def goto_screen(self, screen_index):
         self.stackedWidget.setCurrentIndex(screen_index)

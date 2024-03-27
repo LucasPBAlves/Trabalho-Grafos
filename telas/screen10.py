@@ -5,7 +5,7 @@ from PyQt6.QtCore import Qt
 from telas.screen1 import Screen1
 
 
-class Screen9(QDialog):
+class Screen10(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Testar se o grafo é completo")
