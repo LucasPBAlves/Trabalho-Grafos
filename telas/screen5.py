@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox
 from PyQt6.QtCore import Qt
-from telas.screen1 import Screen1
+from telas.screen3 import Screen3
 
 
 class Screen5(QDialog):
@@ -34,28 +34,4 @@ class Screen5(QDialog):
 
         self.setLayout(layout)
 
-    def vizinhanca_vertice(self, vertice):
-
-        vizinhanca = []
-        self.screen1 = Screen1()
-        for i in range(self.vertice):
-            if self.screen1.graph_representation[vertice][i] == 1:
-                vizinhanca.append(i)
-        return vizinhanca
-
-    def identificar_vizinhos(self):
-        # Obter o vértice inserido pelo usuário
-        vertice = self.vertice_input.text()
-
-        # Verificar se o vértice inserido é um número inteiro
-        try:
-            vertice = int(vertice)
-        except ValueError:
-            QMessageBox.warning(self, "Erro", "Insira um número inteiro válido para o vértice.")
-            return
-
-        # Chamar o método de identificação de vizinhos da classe MatrizAdjacencia
-        vizinhanca = self.vizinhanca_vertice(vertice)
-
-        # Exibir a lista de vizinhos em uma caixa de diálogo
-        QMessageBox.information(self, "Vizinhos", f"Os vizinhos do vértice {vertice} são: {vizinhanca}")
+   
