@@ -16,6 +16,8 @@ from telas.screen2 import Screen2
 from telas.screen3 import Screen3
 from telas.screen4 import Screen4
 from telas.screen5 import Screen5
+from telas.screen6 import Screen6
+from telas.screen7 import Screen7
 from telas.screen8 import Screen8
 from telas.screen9 import Screen9
 
@@ -108,6 +110,7 @@ class MainWindow(QMainWindow):
         self.stackedWidget.setCurrentWidget(self.screen4)
 
     def handle_action_from_screen4(self, screen_id):
+        print(screen_id, "IDIDIDID")
         # Com base no screen_id, decidir qual tela mostrar
         if screen_id == 5:
             self.prepare_screen5()
@@ -132,37 +135,36 @@ class MainWindow(QMainWindow):
     def prepare_screen5(self):
         if not hasattr(self, 'screen5'):
             self.screen5 = Screen5()
-            self.screen5.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen5)
-        self.stackedWidget.setCurrentWidget(self.screen5)
+            self.stackedWidget.setCurrentWidget(self.screen5)
 
     def prepare_screen6(self):
         if not hasattr(self, 'screen6'):
-            self.screen6 = Screen5()
-            self.screen6.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
+            self.screen6 = Screen6()
+            #self.screen6.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen6)
-        self.stackedWidget.setCurrentWidget(self.screen6)
+            self.stackedWidget.setCurrentWidget(self.screen6)
 
     def prepare_screen7(self):
         if not hasattr(self, 'screen7'):
-            self.screen7 = Screen5()
+            self.screen7 = Screen7()
             #self.screen7.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen7)
-        self.stackedWidget.setCurrentWidget(self.screen7)
+            self.stackedWidget.setCurrentWidget(self.screen7)
 
     def prepare_screen8(self):
         if not hasattr(self, 'screen8'):
             self.screen8 = Screen8()
             #self.screen8.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen8)
-        self.stackedWidget.setCurrentWidget(self.screen8)
+            self.stackedWidget.setCurrentWidget(self.screen8)
 
     def prepare_screen9(self):
         if not hasattr(self, 'screen9'):
             self.screen9 = Screen9()
             #self.screen9.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen9)
-        self.stackedWidget.setCurrentWidget(self.screen9)
+            self.stackedWidget.setCurrentWidget(self.screen9)
 
     def prepare_screen10(self):
         if not hasattr(self, 'screen10'):

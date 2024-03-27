@@ -1,70 +1,64 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QMessageBox, QLineEdit
-from PyQt6.QtCore import Qt
-
-from telas.screen1 import Screen1
-
+from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QMessageBox)
+from PyQt6.QtCore import Qt, pyqtSignal
+from shared_state import SharedState
 
 class Screen6(QDialog):
+    backSignal = pyqtSignal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Identificação dos sucessores e predecessores de um vértice")
-        self.setGeometry(100, 100, 600, 400)  # Tamanho e posição da janela
+        self.setWindowTitle("Identificação dos Sucessores e Predecessores")
+        self.setGeometry(100, 100, 600, 400)
         self.initUI()
 
     def initUI(self):
         layout = QVBoxLayout()
-
-        # Título da tela
-        label = QLabel("Identificação dos sucessores e predecessores de um vértice", self)
+        print("tela 6")
+        label = QLabel("Identificação dos Sucessores e Predecessores de um Vértice", self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-        # Campo de entrada para o vértice desejado
-        self.vertice_input = QLineEdit(self)
-        layout.addWidget(self.vertice_input)
+        # Campo de entrada para o vértice de interesse
+        self.vertexInput = QLineEdit(self)
+        self.vertexInput.setPlaceholderText("Insira o vértice")
+        layout.addWidget(self.vertexInput)
 
-        # Botão para identificar os sucessores e predecessores
-        button = QPushButton("Identificar Sucessores e Predecessores", self)
-        button.clicked.connect(self.identificar_sucessores_predecessores)
-        layout.addWidget(button)
+        # Botão para identificar sucessores e predecessores
+        identifyButton = QPushButton("Identificar Sucessores e Predecessores", self)
+        identifyButton.clicked.connect(self.identifySuccessorsPredecessors)
+        layout.addWidget(identifyButton)
+
+        # Área para exibir sucessores
+        self.successorsLabel = QLabel("", self)
+        self.successorsLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.successorsLabel)
+
+        # Área para exibir predecessores
+        self.predecessorsLabel = QLabel("", self)
+        self.predecessorsLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.predecessorsLabel)
 
         # Botão Voltar
         backButton = QPushButton("Voltar", self)
-        backButton.clicked.connect(self.close)
-        layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
+        backButton.clicked.connect(self.backSignal.emit)
+        layout.addWidget(backButton)
 
         self.setLayout(layout)
 
-    def predecessor_sucessor(self):
-        # Obter o vértice inserido pelo usuário
-        vertice = self.vertice_input.text()
-
-        # Verificar se o vértice inserido é um número inteiro
-        try:
-            vertice = int(vertice)
-        except ValueError:
-            QMessageBox.warning(self, "Erro", "Insira um número inteiro válido para o vértice.")
+    def identifySuccessorsPredecessors(self):
+        vertex = self.vertexInput.text().strip()
+        if not vertex:
+            QMessageBox.warning(self, "Entrada Inválida", "Por favor, insira o vértice.")
             return
-
-        # Chamar a função para identificar os sucessores e predecessores
-        predecessores, sucessores = self.identificar_sucessores_predecessores(vertice)
-
-        # Exibir os sucessores e predecessores em caixas de diálogo
-        QMessageBox.information(self, "Predecessores", f"Os predecessores do vértice {vertice} são: {predecessores}")
-        QMessageBox.information(self, "Sucessores", f"Os sucessores do vértice {vertice} são: {sucessores}")
-
-    def identificar_sucessores_predecessores(self, vertice):
-        predecessores = []
-        sucessores = []
-        self.screen1 = Screen1()
-        # Verificar predecessores
-        for i in range(self.vertice):
-            if self.screen1.graph_representation[i][vertice] == 1:
-                predecessores.append(i)
-
-        # Verificar sucessores
-        for j in range(self.vertice):
-            if self.vertice[vertice][j] == 1:
-                sucessores.append(j)
-
-        return predecessores, sucessores
+        arestas = SharedState.get_aresta()
+        successors = set()
+        predecessors = set()
+        for aresta in arestas.split(';'):
+            if '-' in aresta:
+                v1, v2 = aresta.split('-')
+                if v1 == vertex:
+                    successors.add(v2)
+                if v2 == vertex:
+                    predecessors.add(v1)
+        self.successorsLabel.setText(f"Sucessores de {vertex}: {', '.join(successors)}")
+        self.predecessorsLabel.setText(f"Predecessores de {vertex}: {', '.join(predecessors)}")
