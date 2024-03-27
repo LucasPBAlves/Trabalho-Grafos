@@ -1,7 +1,6 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox
 from PyQt6.QtCore import Qt
-from telas.screen1 import Screen1
-
+from shared_state import SharedState  # Importação hipotética do estado compartilhado
 
 class Screen5(QDialog):
     def __init__(self, parent=None):
@@ -20,6 +19,7 @@ class Screen5(QDialog):
 
         # Campo de entrada para o vértice desejado
         self.vertice_input = QLineEdit(self)
+        self.vertice_input.setPlaceholderText("Insira o vértice")
         layout.addWidget(self.vertice_input)
 
         # Botão para identificar os vizinhos
@@ -34,28 +34,23 @@ class Screen5(QDialog):
 
         self.setLayout(layout)
 
-    def vizinhanca_vertice(self, vertice):
-
-        vizinhanca = []
-        self.screen1 = Screen1()
-        for i in range(self.vertice):
-            if self.screen1.graph_representation[vertice][i] == 1:
-                vizinhanca.append(i)
-        return vizinhanca
-
     def identificar_vizinhos(self):
-        # Obter o vértice inserido pelo usuário
-        vertice = self.vertice_input.text()
-
-        # Verificar se o vértice inserido é um número inteiro
-        try:
-            vertice = int(vertice)
-        except ValueError:
-            QMessageBox.warning(self, "Erro", "Insira um número inteiro válido para o vértice.")
+        vertice = self.vertice_input.text().strip()
+        if not vertice:
+            QMessageBox.warning(self, "Erro", "Por favor, insira o vértice para identificação.")
             return
 
-        # Chamar o método de identificação de vizinhos da classe MatrizAdjacencia
-        vizinhanca = self.vizinhanca_vertice(vertice)
+        # Acesso à lista de arestas armazenada em SharedState
+        arestas = SharedState.get_arestas()  # Método hipotético para obter as arestas
+
+        # Calcular vizinhança para grafo não direcionado
+        vizinhanca = set()
+        for aresta in arestas:
+            v1, v2 = aresta.split("->")
+            if v1 == vertice:
+                vizinhanca.add(v2)
+            elif v2 == vertice:
+                vizinhanca.add(v1)
 
         # Exibir a lista de vizinhos em uma caixa de diálogo
-        QMessageBox.information(self, "Vizinhos", f"Os vizinhos do vértice {vertice} são: {vizinhanca}")
+        QMessageBox.information(self, "Vizinhos", f"Os vizinhos do vértice {vertice} são: {', '.join(vizinhanca)}")

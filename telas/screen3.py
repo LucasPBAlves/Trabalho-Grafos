@@ -109,6 +109,7 @@ class Screen3(QDialog):
     def gotoNextScreen(self):
         if self.nextButton.isEnabled():
             print(f"Edges string: {self.edgesString}")  # Imprime a string de arestas no terminal
+            SharedState.set_aresta(self.edgesString)
             self.nextSignal.emit()
         else:
             QMessageBox.warning(self, "Ação Inválida", "Adicione todas as arestas necessárias antes de prosseguir.")
