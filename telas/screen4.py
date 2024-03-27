@@ -4,9 +4,7 @@ from shared_state import SharedState
 
 class Screen4(QWidget):
     backSignal = pyqtSignal()
-    nextSignal = pyqtSignal()
-    # Modificado para emitir um inteiro correspondente ao screen_id
-    openScreenSignal = pyqtSignal(int)
+    actionSignal = pyqtSignal(int)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -46,4 +44,4 @@ class Screen4(QWidget):
         print("apertado 2")
         print(screen_id)
         # Emite o sinal com o screen_id ao ser clicado
-        self.nextSignal.emit(screen_id)
+        self.actionSignal.emit(screen_id)

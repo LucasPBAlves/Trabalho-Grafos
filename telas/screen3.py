@@ -1,5 +1,4 @@
-from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QListWidget,
-                             QMessageBox)
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QListWidget, QMessageBox
 from PyQt6.QtCore import Qt, pyqtSignal
 from shared_state import SharedState
 
@@ -16,10 +15,11 @@ class Screen3(QDialog):
         self.uniqueVertices = set()  # Conjunto para armazenar vértices únicos
         self.vertices = SharedState.get_vertices_count()  # Total de vértices permitidos
         self.isDirected = SharedState.get_is_directed()
+        self.edgesString = ""  # String para salvar os vértices adicionados
         self.initUI()
 
     def initUI(self):
-        layout = QVBoxLayout()
+        layout = QVBoxLayout(self)
 
         label = QLabel("Criação e remoção de arestas", self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -57,12 +57,11 @@ class Screen3(QDialog):
         navButtonsLayout.addWidget(backButton)
 
         self.nextButton = QPushButton("Próximo", self)
-        self.nextButton.clicked.connect(self.nextSignal.emit)
+        self.nextButton.clicked.connect(self.gotoNextScreen)
         self.nextButton.setEnabled(False)
         navButtonsLayout.addWidget(self.nextButton)
 
         layout.addLayout(navButtonsLayout)
-        self.setLayout(layout)
 
     def addEdge(self):
         v1 = self.vertex1Input.text().strip()
@@ -71,6 +70,7 @@ class Screen3(QDialog):
             QMessageBox.warning(self, "Entrada Inválida", "Por favor, insira ambos os vértices para a aresta.")
             return
         edge = f"{v1}->{v2}" if self.isDirected or v1 <= v2 else f"{v2}->{v1}"
+        edgeStringFormat = f"{v1}-{v2}"
         if edge in self.edges or (not self.isDirected and f"{v2}->{v1}" in self.edges):
             QMessageBox.warning(self, "Aresta Duplicada", "Esta aresta já foi adicionada ou é inválida.")
             return
@@ -78,6 +78,7 @@ class Screen3(QDialog):
         self.edges.append(edge)
         self.edgesList.addItem(edge)
         self.uniqueVertices.update([v1, v2])
+        self.edgesString += ";" + edgeStringFormat if self.edgesString else edgeStringFormat
         self.remainingVerticesLabel.setText(f"Vértices restantes: {self.vertices - len(self.uniqueVertices)}")
         self.vertex1Input.clear()
         self.vertex2Input.clear()
@@ -89,29 +90,25 @@ class Screen3(QDialog):
             return
         for item in selectedItems:
             edge = item.text()
-            v1, v2 = edge.split("->")
             self.edges.remove(edge)
             self.edgesList.takeItem(self.edgesList.row(item))
-            # Atualiza os vértices únicos após a remoção
+            v1, v2 = edge.split("->")
             self.updateUniqueVerticesAfterRemoval(v1, v2)
         self.remainingVerticesLabel.setText(f"Vértices restantes: {self.vertices - len(self.uniqueVertices)}")
         self.checkIfComplete()
 
     def updateUniqueVerticesAfterRemoval(self, v1, v2):
-        # Atualizar a lista de vértices únicos após a remoção de uma aresta
-        for vertex in [v1, v2]:
-            if all(vertex not in edge.split("->") for edge in self.edges):
-                self.uniqueVertices.discard(vertex)
+        # Remova vértices de self.uniqueVertices se não estão mais em nenhuma aresta
+        self.uniqueVertices = {v.split("->")[0] for v in self.edges}.union({v.split("->")[1] for v in self.edges})
+        self.remainingVerticesLabel.setText(f"Vértices restantes: {self.vertices - len(self.uniqueVertices)}")
 
     def checkIfComplete(self):
-        # Habilita o botão Próximo apenas se todos os vértices únicos foram adicionados
-        self.nextButton.setEnabled(len(self.uniqueVertices) == self.vertices)
-# Continuação da classe Screen3
+        # Habilita o botão "Próximo" se o número de vértices únicos adicionados corresponder ao total de vértices permitidos
+        self.nextButton.setEnabled(len(self.uniqueVertices) >= self.vertices)
 
     def gotoNextScreen(self):
         if self.nextButton.isEnabled():
-            # Aqui você pode adicionar qualquer lógica adicional necessária antes de mudar de tela
+            print(f"Edges string: {self.edgesString}")  # Imprime a string de arestas no terminal
             self.nextSignal.emit()
         else:
             QMessageBox.warning(self, "Ação Inválida", "Adicione todas as arestas necessárias antes de prosseguir.")
-

@@ -97,18 +97,22 @@ class MainWindow(QMainWindow):
         if not hasattr(self, 'screen4'):
             self.screen4 = Screen4()
             self.screen4.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen3)))
+            self.screen4.actionSignal.connect(self.handle_action_from_screen4)  # Novo método para tratar a ação
             self.stackedWidget.addWidget(self.screen4)
-            self.screen4.nextSignal.connect(self.prepare_menu)
-            self.stackedWidget.setCurrentWidget(self.screen4)
+        self.stackedWidget.setCurrentWidget(self.screen4)
 
-    def prepare_menu(self, screen_id):
-        print(screen_id)
-        # Aqui você prepara e exibe a tela correspondente ao ID recebido
+    def handle_action_from_screen4(self, screen_id):
+        # Com base no screen_id, decidir qual tela mostrar
         if screen_id == 5:
-            if not hasattr(self, 'screen5'):
-                self.screen5 = Screen5()
-                self.stackedWidget.addWidget(self.screen5)
-                self.stackedWidget.setCurrentWidget(self.screen5)
+            self.prepare_screen5()  # Supondo que prepare_screen5() prepare e mostre a Screen5
+        # Adicione condições para outros screen_ids...
+
+    def prepare_screen5(self):
+        if not hasattr(self, 'screen5'):
+            self.screen5 = Screen5()
+            # Configurar screen5 conforme necessário...
+            self.stackedWidget.addWidget(self.screen5)
+        self.stackedWidget.setCurrentWidget(self.screen5)
 
     def goto_screen(self, screen_index):
         self.stackedWidget.setCurrentIndex(screen_index)
