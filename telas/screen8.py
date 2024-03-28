@@ -1,38 +1,78 @@
-# screen7.py
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
-from PyQt6.QtCore import Qt
-
-from telas.screen1 import Screen1
-
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy, QMessageBox
+from PyQt6.QtCore import Qt, pyqtSignal
+from shared_state import SharedState
 
 class Screen8(QDialog):
+    backSignal = pyqtSignal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Testar se o grafo é simples")
-        self.setGeometry(100, 100, 600, 400)  # Tamanho e posição da janela
+        self.setGeometry(100, 100, 600, 400)
         self.initUI()
 
     def initUI(self):
         layout = QVBoxLayout()
 
-        # Exemplo de um widget adicional, pode ser um texto ou qualquer coisa relacionada a esta tela
-        label = QLabel("Testar se o grafo é simples", self)
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(label)
+        # Padding no topo
+        layout.addItem(QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
 
-        # Botão Voltar
+        instructionLabel = QLabel("Clique no botão abaixo para testar se o grafo é simples.", self)
+        instructionLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(instructionLabel)
+
+        # Layout horizontal para centralizar o botão
+        buttonLayout = QHBoxLayout()
+        buttonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+
+        testButton = QPushButton("Testar", self)
+        testButton.clicked.connect(self.testIfGraphIsSimple)
+        buttonLayout.addWidget(testButton)
+
+        buttonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        layout.addLayout(buttonLayout)
+
+        # Padding no fundo
+        layout.addItem(QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
+
         backButton = QPushButton("Voltar", self)
-        backButton.clicked.connect(self.close)
-        layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
+        backButton.clicked.connect(self.backSignal.emit)
+        layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.setLayout(layout)
 
-    def is_simple(self):
-        self.screen1 = Screen1()
-        for i in range(self.vertice):
-            for j in range(self.vertice):
-                if i == j and self.screen1.graph_representation[i][j] != 0:
-                    return False
-                if self.screen1.graph_representation[i][j] > 1:
-                    return False
-        return True
+    def testIfGraphIsSimple(self):
+        arestas_str = SharedState.get_aresta()
+        if not arestas_str:
+            QMessageBox.warning(self, "Aviso", "Não há arestas definidas no grafo.")
+            return
+
+        arestas = arestas_str.split(';')
+        vertices = set()
+        simple = True
+        for aresta in arestas:
+            v1, v2 = aresta.split('-')
+            if v1 == v2:  # Detecta um laço
+                simple = False
+                break
+            if arestas.count(aresta) > 1:  # Detecta arestas paralelas
+                simple = False
+                break
+            vertices.add(frozenset([v1, v2]))
+
+        if len(vertices) != len(arestas):  # Detecta arestas paralelas de forma indireta
+            simple = False
+
+        if simple:
+            QMessageBox.information(self, "Resultado", "O grafo é simples.")
+        else:
+            QMessageBox.information(self, "Resultado", "O grafo não é simples.")
+
+if __name__ == '__main__':
+    import sys
+    from PyQt6.QtWidgets import QApplication
+
+    app = QApplication(sys.argv)
+    screen = Screen8()
+    screen.show()
+    sys.exit(app.exec())

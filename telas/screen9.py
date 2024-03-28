@@ -1,35 +1,51 @@
-# screen8.py
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
-from PyQt6.QtCore import Qt
-from telas.screen6 import Screen6
-
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QMessageBox
+from PyQt6.QtCore import Qt, pyqtSignal
+from collections import defaultdict
+from shared_state import SharedState
 
 class Screen9(QDialog):
+    backSignal = pyqtSignal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Testar se o grafo é regular")
-        self.setGeometry(100, 100, 600, 400)  # Tamanho e posição da janela
+        self.setWindowTitle("Testar se o Grafo é Regular")
+        self.setGeometry(100, 100, 600, 400)
         self.initUI()
 
     def initUI(self):
         layout = QVBoxLayout()
 
-        # Exemplo de um widget adicional, pode ser um texto ou qualquer coisa relacionada a esta tela
-        label = QLabel("Testar se o grafo é regular", self)
+        label = QLabel("Clique para testar se o grafo é regular:", self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-        # Botão Voltar
+        testButton = QPushButton("Testar Regularidade", self)
+        testButton.clicked.connect(self.testRegularity)
+        layout.addWidget(testButton)
+
+        self.resultLabel = QLabel("", self)
+        self.resultLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.resultLabel)
+
         backButton = QPushButton("Voltar", self)
-        backButton.clicked.connect(self.close)
+        backButton.clicked.connect(self.backSignal.emit)
         layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.setLayout(layout)
 
-    def is_regular(self):
-        self.screen6 = Screen6()
-        grau_base = self.screen6.grau_vertice(0)
-        for i in range(1, self.vertice):
-            if self.screen6.grau_vertice(i) != grau_base:
-                return False
-        return True
+    def testRegularity(self):
+        arestas = SharedState.get_aresta().split(';')
+        grau_vertices = defaultdict(int)
+
+        for aresta in arestas:
+            v1, v2 = aresta.split('-')
+            grau_vertices[v1] += 1
+            grau_vertices[v2] += 1
+
+        graus = set(grau_vertices.values())
+
+        if len(graus) == 1:
+            self.resultLabel.setText(f"O grafo é regular com grau {graus.pop()}.")
+        else:
+            self.resultLabel.setText("O grafo não é regular.")
+
