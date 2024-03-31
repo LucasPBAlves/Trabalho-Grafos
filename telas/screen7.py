@@ -1,7 +1,7 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox
+from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox, QSpacerItem,
+                             QSizePolicy, QHBoxLayout)
 from PyQt6.QtCore import Qt, pyqtSignal
 from shared_state import SharedState
-
 
 class Screen7(QDialog):
     backSignal = pyqtSignal()
@@ -19,24 +19,38 @@ class Screen7(QDialog):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
+        inputLayout = QHBoxLayout()
+        inputLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+
         self.vertexInput = QLineEdit(self)
         self.vertexInput.setPlaceholderText("Vértice")
-        layout.addWidget(self.vertexInput)
+        self.vertexInput.setFixedSize(200, 40)
+        inputLayout.addWidget(self.vertexInput)
+
+        inputLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        layout.addLayout(inputLayout)
+
+        buttonLayout = QHBoxLayout()
+        buttonLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
 
         checkDegreeButton = QPushButton("Verificar Grau", self)
+        checkDegreeButton.setFixedSize(200, 40)
         checkDegreeButton.clicked.connect(self.checkDegree)
-        layout.addWidget(checkDegreeButton)
+        buttonLayout.addWidget(checkDegreeButton)
+
+        buttonLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        layout.addLayout(buttonLayout)
 
         self.degreeLabel = QLabel("", self)
         self.degreeLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.degreeLabel)
 
         backButton = QPushButton("Voltar", self)
+        backButton.setFixedSize(200, 40)
+        layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignCenter)
         backButton.clicked.connect(self.backSignal.emit)
-        layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.setLayout(layout)
-
     def checkDegree(self):
         vertex = self.vertexInput.text().strip()
         if not vertex:

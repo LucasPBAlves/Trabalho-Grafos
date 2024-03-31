@@ -40,7 +40,7 @@ class Screen11(QDialog):
 
         backButton = QPushButton("Voltar", self)
         backButton.clicked.connect(self.backSignal.emit)
-        layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.setLayout(layout)
 

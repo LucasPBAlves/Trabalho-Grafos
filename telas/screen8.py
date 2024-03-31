@@ -14,38 +14,39 @@ class Screen8(QDialog):
     def initUI(self):
         layout = QVBoxLayout()
 
-        # Padding no topo
-        layout.addItem(QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
+        # Espaçamento no topo
+        layout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
 
         instructionLabel = QLabel("Clique no botão abaixo para testar se o grafo é simples.", self)
         instructionLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(instructionLabel)
 
-        # Layout horizontal para centralizar o botão
-        buttonLayout = QHBoxLayout()
-        buttonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        # Espaçador entre o texto de instrução e o botão
+        layout.addItem(QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed))
 
+        # Botão centralizado para testar se o grafo é simples
         testButton = QPushButton("Testar", self)
+        testButton.setFixedSize(200, 40)
+        layout.addWidget(testButton, alignment=Qt.AlignmentFlag.AlignCenter)
         testButton.clicked.connect(self.testIfGraphIsSimple)
-        buttonLayout.addWidget(testButton)
 
-        buttonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
-        layout.addLayout(buttonLayout)
+        # Espaçador entre o botão e a área de resultado
+        layout.addItem(QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed))
 
-        # Padding no fundo
-        layout.addItem(QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
-
-         # Área para exibir se é simples ou não
+        # Área para exibir se é simples ou não
         self.resultLabel = QLabel("", self)
         self.resultLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.resultLabel)
 
+        # Espaçamento antes do botão Voltar
+        layout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
+
         backButton = QPushButton("Voltar", self)
-        backButton.clicked.connect(self.backSignal.emit)
+        backButton.setFixedSize(200, 40)
         layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignCenter)
+        backButton.clicked.connect(self.backSignal.emit)
 
         self.setLayout(layout)
-
     def testIfGraphIsSimple(self):
         arestas_str = SharedState.get_aresta()
         if not arestas_str:

@@ -135,62 +135,63 @@ class MainWindow(QMainWindow):
     def prepare_screen5(self):
         if not hasattr(self, 'screen5'):
             self.screen5 = Screen5()
+            self.screen5.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen5)
             self.stackedWidget.setCurrentWidget(self.screen5)
 
     def prepare_screen6(self):
         if not hasattr(self, 'screen6'):
             self.screen6 = Screen6()
-            #self.screen6.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
+            self.screen6.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen6)
             self.stackedWidget.setCurrentWidget(self.screen6)
 
     def prepare_screen7(self):
         if not hasattr(self, 'screen7'):
             self.screen7 = Screen7()
-            #self.screen7.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
+            self.screen7.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen7)
             self.stackedWidget.setCurrentWidget(self.screen7)
 
     def prepare_screen8(self):
         if not hasattr(self, 'screen8'):
             self.screen8 = Screen8()
-            #self.screen8.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
+            self.screen8.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen8)
             self.stackedWidget.setCurrentWidget(self.screen8)
 
     def prepare_screen9(self):
         if not hasattr(self, 'screen9'):
             self.screen9 = Screen9()
-            #self.screen9.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
+            self.screen9.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen9)
             self.stackedWidget.setCurrentWidget(self.screen9)
 
     def prepare_screen10(self):
         if not hasattr(self, 'screen10'):
             self.screen10 = Screen10()
-            #self.screen10.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
+            self.screen10.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen10)
         self.stackedWidget.setCurrentWidget(self.screen10)
 
     def prepare_screen11(self):
         if not hasattr(self, 'screen11'):
             self.screen11 = Screen11()
-            #self.screen11.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
+            self.screen11.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen11)
         self.stackedWidget.setCurrentWidget(self.screen11)
 
     def prepare_screen12(self):
         if not hasattr(self, 'screen12'):
             self.screen12 = Screen12()
-            #self.screen12.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
+            self.screen12.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen12)
         self.stackedWidget.setCurrentWidget(self.screen12)
 
     def prepare_screen13(self):
         if not hasattr(self, 'screen13'):
             self.screen13 = Screen13()
-            #self.screen13.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
+            self.screen13.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen13)
         self.stackedWidget.setCurrentWidget(self.screen13)
     def goto_screen(self, screen_index):

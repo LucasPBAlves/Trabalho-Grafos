@@ -22,4 +22,12 @@ QLineEdit {
     border-radius: 5px;
     padding: 5px;
 }
+
+QHeaderView::section {
+    background-color: #333333;  
+    color: white;
+    border: none;
+    font-size: 10pt;
+}
 """
+

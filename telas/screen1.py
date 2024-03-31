@@ -1,8 +1,7 @@
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QSpacerItem, QSizePolicy
 
 from shared_state import SharedState
-
 
 class Screen1(QDialog):
     backSignal = pyqtSignal()
@@ -10,8 +9,6 @@ class Screen1(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.nextButton = None
-        self.verticesInput = None
         self.setWindowTitle("Criação de um grafo com X vértices")
         self.setGeometry(100, 100, 600, 400)
         self.init_ui()
@@ -23,20 +20,31 @@ class Screen1(QDialog):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
+        # Inclui um QHBoxLayout para centralizar o QLineEdit
+        inputLayout = QHBoxLayout()
+        inputLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         self.verticesInput = QLineEdit(self)
         self.verticesInput.setPlaceholderText("Número de vértices")
-        layout.addWidget(self.verticesInput)
+        self.verticesInput.setFixedSize(200, 40)
+        inputLayout.addWidget(self.verticesInput)
+        inputLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        layout.addLayout(inputLayout)
 
+        # Inclui um QHBoxLayout para centralizar o botão de adicionar vértices
+        buttonLayout = QHBoxLayout()
+        buttonLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         add_vertices_button = QPushButton("Adicionar Vértices", self)
         add_vertices_button.clicked.connect(self.create_graph)
-        layout.addWidget(add_vertices_button)
+        add_vertices_button.setFixedSize(200, 40)
+        buttonLayout.addWidget(add_vertices_button)
+        buttonLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        layout.addLayout(buttonLayout)
 
         self.statusMessage = QLabel("", self)
         self.statusMessage.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.statusMessage)
 
         buttons_layout = QHBoxLayout()
-
         back_button = QPushButton("Voltar", self)
         back_button.clicked.connect(self.backSignal.emit)
         buttons_layout.addWidget(back_button, alignment=Qt.AlignmentFlag.AlignLeft)
@@ -48,7 +56,6 @@ class Screen1(QDialog):
 
         layout.addLayout(buttons_layout)
         self.setLayout(layout)
-
     def create_graph(self):
         try:
             vertices = int(self.verticesInput.text())

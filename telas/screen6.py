@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QMessageBox)
+from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QMessageBox, QSpacerItem, QSizePolicy)
 from PyQt6.QtCore import Qt, pyqtSignal
 from shared_state import SharedState
 
@@ -13,35 +13,46 @@ class Screen6(QDialog):
 
     def initUI(self):
         layout = QVBoxLayout()
-        print("tela 6")
+
         label = QLabel("Identificação dos Sucessores e Predecessores de um Vértice", self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-        # Campo de entrada para o vértice de interesse
+        # Ajustando o tamanho e adicionando padding aos elementos
+        inputLayout = QHBoxLayout()
+        inputLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+
         self.vertexInput = QLineEdit(self)
         self.vertexInput.setPlaceholderText("Insira o vértice")
-        layout.addWidget(self.vertexInput)
+        self.vertexInput.setFixedSize(200, 40)
+        inputLayout.addWidget(self.vertexInput)
 
-        # Botão para identificar sucessores e predecessores
-        identifyButton = QPushButton("Identificar Sucessores e Predecessores", self)
+        inputLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        layout.addLayout(inputLayout)
+
+        buttonLayout = QHBoxLayout()
+        buttonLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+
+        identifyButton = QPushButton("Identificar", self)
+        identifyButton.setFixedSize(200, 40)
         identifyButton.clicked.connect(self.identifySuccessorsPredecessors)
-        layout.addWidget(identifyButton)
+        buttonLayout.addWidget(identifyButton)
 
-        # Área para exibir sucessores
+        buttonLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        layout.addLayout(buttonLayout)
+
         self.successorsLabel = QLabel("", self)
         self.successorsLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.successorsLabel)
 
-        # Área para exibir predecessores
         self.predecessorsLabel = QLabel("", self)
         self.predecessorsLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.predecessorsLabel)
 
-        # Botão Voltar
         backButton = QPushButton("Voltar", self)
+        backButton.setFixedSize(200, 40)
+        layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignCenter)
         backButton.clicked.connect(self.backSignal.emit)
-        layout.addWidget(backButton)
 
         self.setLayout(layout)
 

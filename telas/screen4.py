@@ -1,5 +1,5 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton
-from PyQt6.QtCore import pyqtSignal
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QSpacerItem, QSizePolicy, QLabel
+from PyQt6.QtCore import pyqtSignal, Qt
 from shared_state import SharedState
 
 class Screen4(QWidget):
@@ -12,34 +12,54 @@ class Screen4(QWidget):
         self.initUI()
 
     def initUI(self):
-        layout = QVBoxLayout(self)
+        mainLayout = QVBoxLayout(self)
+
+        # Title text
+        title = QLabel("Escolha a ação desejada:", self)
+        title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        mainLayout.addWidget(title)
+
+        # Adding a small spacer after the title for padding
+        mainLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
+
         isDirected = SharedState.get_is_directed()
 
-        # Aqui nós adicionamos diretamente o botão com sua ação correspondente
+        # Add buttons with horizontal alignment
         if not isDirected:
-            self.addButton(layout, "Identificação da vizinhança de um vértice", 5)
+            self.addButton(mainLayout, "Identificação da vizinhança de um vértice", 5)
         if isDirected:
-            self.addButton(layout, "Identificação dos sucessores e predecessores de um vértice", 6)
+            self.addButton(mainLayout, "Identificação dos sucessores e predecessores de um vértice", 6)
 
-        self.addButton(layout, "Identificação do grau de um determinado vértice", 7)
-        self.addButton(layout, "Testar se o grafo é simples", 8)
-        self.addButton(layout, "Testar se o grafo é regular", 9)
-        self.addButton(layout, "Testar se o grafo é completo", 10)
-        self.addButton(layout, "Testar se o grafo é bipartido", 11)
-        self.addButton(layout, "Representação de grafos utilizando Matriz de Adjacência", 12)
-        self.addButton(layout, "Representação de grafos utilizando Lista de Adjacência", 13)
+        self.addButton(mainLayout, "Identificação do grau de um determinado vértice", 7)
+        self.addButton(mainLayout, "Testar se o grafo é simples", 8)
+        self.addButton(mainLayout, "Testar se o grafo é regular", 9)
+        self.addButton(mainLayout, "Testar se o grafo é completo", 10)
+        self.addButton(mainLayout, "Testar se o grafo é bipartido", 11)
+        self.addButton(mainLayout, "Representação de grafos utilizando Matriz de Adjacência", 12)
+        self.addButton(mainLayout, "Representação de grafos utilizando Lista de Adjacência", 13)
 
+        # Spacer to push everything to the top
+        mainLayout.addItem(QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
+
+        # Back button at the bottom-right
+        backButtonLayout = QHBoxLayout()
+        backButtonLayout.addItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         backButton = QPushButton("Voltar", self)
         backButton.clicked.connect(self.backSignal.emit)
-        layout.addWidget(backButton)
+        backButtonLayout.addWidget(backButton)
+        mainLayout.addLayout(backButtonLayout)
 
     def addButton(self, layout, text, screen_id):
-        button = QPushButton(text, self)
-        # Conecta diretamente o botão ao slot correto, emitindo o screen_id
-        button.clicked.connect(lambda: self.buttonClicked(screen_id))
-        print("apertado")
-        layout.addWidget(button)
+        buttonLayout = QHBoxLayout()
+        buttonLayout.addItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
 
+        button = QPushButton(text, self)
+        button.setFixedSize(800, 40)
+        button.clicked.connect(lambda: self.buttonClicked(screen_id))
+        buttonLayout.addWidget(button)
+
+        buttonLayout.addItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        layout.addLayout(buttonLayout)
     def buttonClicked(self, screen_id):
         print("apertado 2")
         print(screen_id)
