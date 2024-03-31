@@ -35,6 +35,11 @@ class Screen8(QDialog):
         # Padding no fundo
         layout.addItem(QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
 
+         # Área para exibir se é simples ou não
+        self.resultLabel = QLabel("", self)
+        self.resultLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.resultLabel)
+
         backButton = QPushButton("Voltar", self)
         backButton.clicked.connect(self.backSignal.emit)
         layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignCenter)
@@ -64,9 +69,9 @@ class Screen8(QDialog):
             simple = False
 
         if simple:
-            QMessageBox.information(self, "Resultado", "O grafo é simples.")
+           self.resultLabel.setText("O grafo é simples.")
         else:
-            QMessageBox.information(self, "Resultado", "O grafo não é simples.")
+             self.resultLabel.setText("O grafo não é simples.")
 
 if __name__ == '__main__':
     import sys

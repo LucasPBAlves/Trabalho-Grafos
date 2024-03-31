@@ -1,6 +1,8 @@
 # screen12.py
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel
-from PyQt6.QtCore import Qt
+from tkinter import messagebox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy
+from PyQt6.QtCore import Qt, pyqtSignal
+from shared_state import SharedState
 
 class Screen13(QDialog):
     def __init__(self, parent=None):
@@ -12,10 +14,27 @@ class Screen13(QDialog):
     def initUI(self):
         layout = QVBoxLayout()
 
-        # Exemplo de um widget adicional, pode ser um texto ou qualquer coisa relacionada a esta tela
-        label = QLabel("Representação de grafos utilizando Lista de Adjacência", self)
-        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(label)
+        layout.addItem(QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
+        instructionLabel = QLabel("Clique no botão abaixo para mostrar a Lista de adjacência do grafo.", self)
+        instructionLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(instructionLabel)
+         # Layout horizontal para centralizar o botão
+        buttonLayout = QHBoxLayout()
+        buttonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+
+        testButton = QPushButton("Mostrar Lista de Adjacência", self)
+        testButton.clicked.connect(self.showAdjacencyList)
+        buttonLayout.addWidget(testButton)
+
+        buttonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
+        layout.addLayout(buttonLayout)
+
+         # Label para exibir a matriz de adjacência
+        self.resultLabel = QLabel("", self)
+        self.resultLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.resultLabel)
+        # Padding no fundo
+        layout.addItem(QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
 
         # Botão Voltar
         backButton = QPushButton("Voltar", self)
@@ -24,6 +43,37 @@ class Screen13(QDialog):
 
         self.setLayout(layout)
 
-    def imprimir_lista(self):
-        for vertice, vizinhos in self.lista_adjacencia.items():
-            print(f"{vertice}: {vizinhos}")
+    def showAdjacencyList(self):
+            arestas_str = SharedState.get_aresta()
+            if not arestas_str:
+                messagebox.information(self, "Aviso!", "Nenhuma aresta foi cadastrada.")
+                return
+
+            isDirected = SharedState.get_is_directed()
+            arestas = arestas_str.split(";")
+            vertices= {}
+
+
+            for aresta in arestas:
+                v1, v2 = aresta.split('-')
+                if v1 not in vertices:
+                    vertices[v1] = []
+                if v2 not in vertices:
+                    vertices[v2] = []
+
+                vertices[v1].append(v2)
+                if not isDirected:
+
+                 vertices[v2].append(v1)
+
+                adjacencylist_str = ""
+
+                for vertex, adj_list in vertices.items():
+                    if isDirected:
+                        adjacencylist_str += f"{vertex} -> {', '.join(adj_list)}\n"
+                    else:
+                        adjacencylist_str += f"{vertex} -> {','.join(adj_list)} \n"
+
+            self.resultLabel.setText(adjacencylist_str)
+                        
+                
