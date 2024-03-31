@@ -1,6 +1,8 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy, QMessageBox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy, \
+    QMessageBox
 from PyQt6.QtCore import Qt, pyqtSignal
 from shared_state import SharedState
+
 
 class Screen8(QDialog):
     backSignal = pyqtSignal()
@@ -47,6 +49,7 @@ class Screen8(QDialog):
         backButton.clicked.connect(self.backSignal.emit)
 
         self.setLayout(layout)
+
     def testIfGraphIsSimple(self):
         arestas_str = SharedState.get_aresta()
         if not arestas_str:
@@ -70,9 +73,10 @@ class Screen8(QDialog):
             simple = False
 
         if simple:
-           self.resultLabel.setText("O grafo é simples.")
+            self.resultLabel.setText("O grafo é simples.")
         else:
-             self.resultLabel.setText("O grafo não é simples.")
+            self.resultLabel.setText("O grafo não é simples.")
+
 
 if __name__ == '__main__':
     import sys

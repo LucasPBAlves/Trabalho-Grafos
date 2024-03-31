@@ -1,5 +1,6 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QListWidget, QMessageBox
 from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QListWidget, QMessageBox
+
 from shared_state import SharedState
 
 
@@ -108,7 +109,7 @@ class Screen3(QDialog):
 
     def gotoNextScreen(self):
         if self.nextButton.isEnabled():
-            print(f"Edges string: {self.edgesString}")  # Imprime a string de arestas no terminal
+            print(f"Edges string: {self.edgesString}")
             SharedState.set_aresta(self.edgesString)
             self.nextSignal.emit()
         else:

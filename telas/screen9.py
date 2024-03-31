@@ -1,7 +1,9 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QMessageBox, QHBoxLayout, QSpacerItem, QSizePolicy
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QMessageBox, QHBoxLayout, QSpacerItem, \
+    QSizePolicy
 from PyQt6.QtCore import Qt, pyqtSignal
 from collections import defaultdict
 from shared_state import SharedState
+
 
 class Screen9(QDialog):
     backSignal = pyqtSignal()
@@ -25,14 +27,16 @@ class Screen9(QDialog):
         layout.addItem(QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed))
 
         buttonLayout = QHBoxLayout()
-        buttonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))  # Espaço antes do botão
+        buttonLayout.addItem(
+            QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))  # Espaço antes do botão
 
         testButton = QPushButton("Testar Regularidade", self)
         testButton.setFixedSize(200, 40)  # Ajusta tamanho do botão
         testButton.clicked.connect(self.testRegularity)
         buttonLayout.addWidget(testButton)
 
-        buttonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))  # Espaço após o botão
+        buttonLayout.addItem(
+            QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))  # Espaço após o botão
         layout.addLayout(buttonLayout)
 
         # Espaço entre o botão e o resultado
@@ -48,7 +52,8 @@ class Screen9(QDialog):
         backButton = QPushButton("Voltar", self)
         backButton.setFixedSize(200, 40)  # Ajusta tamanho do botão "Voltar"
         backButtonLayout = QHBoxLayout()
-        backButtonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))  # Preenche o espaço até o botão "Voltar"
+        backButtonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding,
+                                             QSizePolicy.Policy.Minimum))  # Preenche o espaço até o botão "Voltar"
         backButtonLayout.addWidget(backButton)
         backButton.clicked.connect(self.backSignal.emit)
         layout.addLayout(backButtonLayout)

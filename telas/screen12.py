@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from shared_state import SharedState
 from styles import DARK_THEME_STYLE
 
+
 class Screen12(QDialog):
     backSignal = pyqtSignal()
 
@@ -52,6 +53,7 @@ class Screen12(QDialog):
         layout.addWidget(backButton, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.setLayout(layout)
+
     def showMatrix(self):
         arestas_str = SharedState.get_aresta()
         isDirected = SharedState.get_is_directed()

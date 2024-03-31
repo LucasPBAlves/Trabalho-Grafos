@@ -1,7 +1,9 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QFont
-from shared_state import SharedState  # Importe o SharedState
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout
+
+from shared_state import SharedState
+
 
 class Screen2(QDialog):
     backSignal = pyqtSignal()
@@ -28,11 +30,9 @@ class Screen2(QDialog):
         infoLabel.setFont(QFont("Arial", 14))
         layout.addWidget(infoLabel)
 
-        # Container para centralizar os botões de seleção
         buttonContainer = QHBoxLayout()
         buttonContainer.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Botões de seleção dentro de um QVBoxLayout para alinhá-los verticalmente
         selectionLayout = QVBoxLayout()
         directedButton = QPushButton("Direcionado", self)
         undirectedButton = QPushButton("Não Direcionado", self)
@@ -68,7 +68,7 @@ class Screen2(QDialog):
         self.setLayout(layout)
 
     def setGraphType(self, isDirected):
-        SharedState.set_is_directed(isDirected)  # Atualiza SharedState com a escolha do usuário
+        SharedState.set_is_directed(isDirected)
         self.nextButton.setEnabled(True)
         choiceText = "Tipo de grafo selecionado: Direcionado" if isDirected else "Tipo de grafo selecionado: Não Direcionado"
         self.choiceLabel.setText(choiceText)

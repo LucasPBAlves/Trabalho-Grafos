@@ -1,7 +1,9 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy, QMessageBox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy, \
+    QMessageBox
 from PyQt6.QtCore import Qt, pyqtSignal
 from shared_state import SharedState
 import itertools
+
 
 class Screen10(QDialog):
     backSignal = pyqtSignal()
@@ -46,7 +48,8 @@ class Screen10(QDialog):
 
         # Botão "Voltar" no canto inferior direito
         backButtonLayout = QHBoxLayout()
-        backButtonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))  # Espaçador para empurrar o botão para a direita
+        backButtonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding,
+                                             QSizePolicy.Policy.Minimum))  # Espaçador para empurrar o botão para a direita
         backButton = QPushButton("Voltar", self)
         backButton.clicked.connect(self.backSignal.emit)
         backButtonLayout.addWidget(backButton)

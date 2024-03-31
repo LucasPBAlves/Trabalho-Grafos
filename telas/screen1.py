@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit
 
 from shared_state import SharedState
 
+
 class Screen1(QDialog):
     backSignal = pyqtSignal()
     nextSignal = pyqtSignal()
@@ -20,7 +21,6 @@ class Screen1(QDialog):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-        # Inclui um QHBoxLayout para centralizar o QLineEdit
         inputLayout = QHBoxLayout()
         inputLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         self.verticesInput = QLineEdit(self)
@@ -30,7 +30,6 @@ class Screen1(QDialog):
         inputLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         layout.addLayout(inputLayout)
 
-        # Inclui um QHBoxLayout para centralizar o botão de adicionar vértices
         buttonLayout = QHBoxLayout()
         buttonLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         add_vertices_button = QPushButton("Adicionar Vértices", self)
@@ -56,6 +55,7 @@ class Screen1(QDialog):
 
         layout.addLayout(buttons_layout)
         self.setLayout(layout)
+
     def create_graph(self):
         try:
             vertices = int(self.verticesInput.text())
@@ -71,7 +71,6 @@ class Screen1(QDialog):
             self.nextButton.setEnabled(False)
 
     def goto_next_screen(self):
-        # Se você precisar do valor em outra tela, use SharedState.getVerticesCount()
         if SharedState.get_vertices_count() > 0:
             print(SharedState.vertices_count)
             self.nextSignal.emit()

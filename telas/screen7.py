@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdi
 from PyQt6.QtCore import Qt, pyqtSignal
 from shared_state import SharedState
 
+
 class Screen7(QDialog):
     backSignal = pyqtSignal()
 
@@ -51,6 +52,7 @@ class Screen7(QDialog):
         backButton.clicked.connect(self.backSignal.emit)
 
         self.setLayout(layout)
+
     def checkDegree(self):
         vertex = self.vertexInput.text().strip()
         if not vertex:
@@ -74,4 +76,3 @@ class Screen7(QDialog):
                         degree += 1
 
         self.degreeLabel.setText(f"O grau do vértice {vertex} é: {degree}")
-
