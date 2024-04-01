@@ -1,6 +1,7 @@
+from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QMessageBox,
                              QSpacerItem, QSizePolicy)
-from PyQt6.QtCore import Qt, pyqtSignal
+
 from shared_state import SharedState
 
 
@@ -20,7 +21,6 @@ class Screen5(QDialog):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-        # Input Layout
         inputLayout = QHBoxLayout()
         inputLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
 
@@ -32,7 +32,6 @@ class Screen5(QDialog):
         inputLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         layout.addLayout(inputLayout)
 
-        # Button Layout
         buttonLayout = QHBoxLayout()
         buttonLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
 
@@ -54,6 +53,7 @@ class Screen5(QDialog):
         backButton.clicked.connect(self.backSignal.emit)
 
         self.setLayout(layout)
+
     def identifyNeighborhood(self):
         vertex = self.vertexInput.text().strip()
         if not vertex:

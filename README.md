@@ -1,13 +1,18 @@
 # Trabalho de Grafos
+
 ***Trabalho de Vizualização de Grafos para a matéria de Grafos, 5° período de Engenharia da Computação da PUC Minas***
 
 # Implementação de Grafos com PyQt6
 
-Este repositório contém o código-fonte de uma aplicação de manipulação de grafos, desenvolvida em Python e utilizando a biblioteca gráfica PyQt6. A aplicação oferece funcionalidades como a criação e visualização de grafos, adição e remoção de arestas, análise de propriedades dos grafos, e representações em Matriz de Adjacência e Lista de Adjacência.
+Este repositório contém o código-fonte de uma aplicação de manipulação de grafos, desenvolvida em Python e utilizando a
+biblioteca gráfica PyQt6. A aplicação oferece funcionalidades como a criação e visualização de grafos, adição e remoção
+de arestas, análise de propriedades dos grafos, e representações em Matriz de Adjacência e Lista de Adjacência.
 
 ## Sobre o Projeto
 
-O objetivo deste projeto é fornecer uma ferramenta interativa para a criação e análise de grafos, permitindo aos usuários testar diferentes propriedades e representações de forma visual e intuitiva. O projeto foi desenvolvido como parte de um trabalho acadêmico sobre estruturas de dados e teoria dos grafos.
+O objetivo deste projeto é fornecer uma ferramenta interativa para a criação e análise de grafos, permitindo aos
+usuários testar diferentes propriedades e representações de forma visual e intuitiva. O projeto foi desenvolvido como
+parte de um trabalho acadêmico sobre estruturas de dados e teoria dos grafos.
 
 ## Autores
 
@@ -50,23 +55,38 @@ python main.py
 ## Navegação das Telas e Funcionalidades
 
 ### Tela Inicial
-- **Criação de um grafo com X vértices**: Permite ao usuário iniciar a criação de um novo grafo, especificando o número de vértices.
+
+- **Criação de um grafo com X vértices**: Permite ao usuário iniciar a criação de um novo grafo, especificando o número
+  de vértices.
 - **Usar grafos já plotados**: Função ainda não implementada.
 
 ### Tela 1: Criação de um grafo com X vértices
-Permite ao usuário especificar o número de vértices do grafo a ser criado. Após definir o número de vértices, o usuário avança para decidir se o grafo será direcionado ou não.
+
+Permite ao usuário especificar o número de vértices do grafo a ser criado. Após definir o número de vértices, o usuário
+avança para decidir se o grafo será direcionado ou não.
 
 ### Tela 2: Definição do Tipo de Grafo
-Nesta tela, o usuário decide se o grafo a ser criado será direcionado ou não direcionado. Essa escolha influenciará as opções disponíveis nas etapas seguintes, especialmente na análise de propriedades específicas do grafo.
+
+Nesta tela, o usuário decide se o grafo a ser criado será direcionado ou não direcionado. Essa escolha influenciará as
+opções disponíveis nas etapas seguintes, especialmente na análise de propriedades específicas do grafo.
 
 ### Tela 3: Adição e Remoção de Arestas
-Após definir o tipo do grafo, o usuário pode adicionar ou remover arestas entre os vértices especificados. Essa tela fornece flexibilidade para modelar o grafo conforme necessário, permitindo ajustes na estrutura de arestas.
+
+Após definir o tipo do grafo, o usuário pode adicionar ou remover arestas entre os vértices especificados. Essa tela
+fornece flexibilidade para modelar o grafo conforme necessário, permitindo ajustes na estrutura de arestas.
 
 ### Tela 4: Menu de Operações
-A partir daqui, o usuário é apresentado a um menu com diversas operações e análises que podem ser realizadas sobre o grafo criado, incluindo:
+
+A partir daqui, o usuário é apresentado a um menu com diversas operações e análises que podem ser realizadas sobre o
+grafo criado, incluindo:
+
 - **Identificação da vizinhança de um vértice** (para grafos não direcionados).
 - **Identificação dos sucessores e predecessores de um vértice** (para grafos direcionados).
-- **Identificação do grau de um determinado vértice**, **testes de propriedades do grafo** (simples, regular, completo, bipartido), e **representações do grafo** (usando matriz de adjacência ou lista de adjacência).
+- **Identificação do grau de um determinado vértice**, **testes de propriedades do grafo** (simples, regular, completo,
+  bipartido), e **representações do grafo** (usando matriz de adjacência ou lista de adjacência).
 
 ### Telas de Análise e Representação
-Cada opção de análise ou representação selecionada no menu de operações leva a uma tela específica onde o usuário pode fornecer dados adicionais necessários (como o vértice de interesse) e visualizar os resultados ou representações gerados.
+
+Cada opção de análise ou representação selecionada no menu de operações leva a uma tela específica onde o usuário pode
+fornecer dados adicionais necessários (como o vértice de interesse) e visualizar os resultados ou representações
+gerados.

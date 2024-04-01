@@ -4,8 +4,8 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPushButton, QLabel, QSpacerItem, \
     QSizePolicy, QHBoxLayout, QStackedWidget
-from styles import DARK_THEME_STYLE
 
+from styles import DARK_THEME_STYLE
 # Importações das telas
 from telas.screen1 import Screen1
 from telas.screen10 import Screen10
@@ -131,7 +131,6 @@ class MainWindow(QMainWindow):
         elif screen_id == 13:
             self.prepare_screen13()
 
-
     def prepare_screen5(self):
         if not hasattr(self, 'screen5'):
             self.screen5 = Screen5()
@@ -194,6 +193,7 @@ class MainWindow(QMainWindow):
             self.screen13.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen13)
         self.stackedWidget.setCurrentWidget(self.screen13)
+
     def goto_screen(self, screen_index):
         self.stackedWidget.setCurrentIndex(screen_index)
 

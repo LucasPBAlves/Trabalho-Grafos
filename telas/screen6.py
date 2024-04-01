@@ -1,6 +1,7 @@
+from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QHBoxLayout, QMessageBox,
                              QSpacerItem, QSizePolicy)
-from PyQt6.QtCore import Qt, pyqtSignal
+
 from shared_state import SharedState
 
 
@@ -20,7 +21,6 @@ class Screen6(QDialog):
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
-        # Ajustando o tamanho e adicionando padding aos elementos
         inputLayout = QHBoxLayout()
         inputLayout.addSpacerItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
 

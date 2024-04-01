@@ -1,6 +1,8 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QSpacerItem, QSizePolicy, QLabel
 from PyQt6.QtCore import pyqtSignal, Qt
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QSpacerItem, QSizePolicy, QLabel
+
 from shared_state import SharedState
+
 
 class Screen4(QWidget):
     backSignal = pyqtSignal()
@@ -14,17 +16,14 @@ class Screen4(QWidget):
     def initUI(self):
         mainLayout = QVBoxLayout(self)
 
-        # Title text
         title = QLabel("Escolha a ação desejada:", self)
         title.setAlignment(Qt.AlignmentFlag.AlignCenter)
         mainLayout.addWidget(title)
 
-        # Adding a small spacer after the title for padding
         mainLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
 
         isDirected = SharedState.get_is_directed()
 
-        # Add buttons with horizontal alignment
         if not isDirected:
             self.addButton(mainLayout, "Identificação da vizinhança de um vértice", 5)
         if isDirected:
@@ -38,10 +37,8 @@ class Screen4(QWidget):
         self.addButton(mainLayout, "Representação de grafos utilizando Matriz de Adjacência", 12)
         self.addButton(mainLayout, "Representação de grafos utilizando Lista de Adjacência", 13)
 
-        # Spacer to push everything to the top
         mainLayout.addItem(QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
 
-        # Back button at the bottom-right
         backButtonLayout = QHBoxLayout()
         backButtonLayout.addItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         backButton = QPushButton("Voltar", self)
@@ -60,8 +57,8 @@ class Screen4(QWidget):
 
         buttonLayout.addItem(QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         layout.addLayout(buttonLayout)
+
     def buttonClicked(self, screen_id):
         print("apertado 2")
         print(screen_id)
-        # Emite o sinal com o screen_id ao ser clicado
         self.actionSignal.emit(screen_id)

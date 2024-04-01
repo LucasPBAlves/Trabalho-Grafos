@@ -60,7 +60,7 @@ class Screen1(QDialog):
         try:
             vertices = int(self.verticesInput.text())
             if vertices > 0:
-                SharedState.set_vertices_count(vertices)  # Atualiza o SharedState
+                SharedState.set_vertices_count(vertices)
                 self.statusMessage.setText(f"Grafo criado com {vertices} vértices.")
                 self.nextButton.setEnabled(True)
             else:

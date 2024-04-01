@@ -30,4 +30,3 @@ QHeaderView::section {
     font-size: 10pt;
 }
 """
-

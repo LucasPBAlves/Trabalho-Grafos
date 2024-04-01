@@ -1,5 +1,6 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QHeaderView
 from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QHeaderView
+
 from shared_state import SharedState
 from styles import DARK_THEME_STYLE
 
@@ -10,8 +11,8 @@ class Screen12(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Mostrar Matriz de Adjacência")
-        self.setGeometry(100, 100, 800, 600)  # Ajustado para melhor visualização
-        self.setStyleSheet(DARK_THEME_STYLE)  # Aplica o tema escuro global
+        self.setGeometry(100, 100, 800, 600)
+        self.setStyleSheet(DARK_THEME_STYLE)
         self.initUI()
 
     def initUI(self):
@@ -25,11 +26,9 @@ class Screen12(QDialog):
         self.showMatrixButton.clicked.connect(self.showMatrix)
         layout.addWidget(self.showMatrixButton, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        # Tabela para exibir a matriz de adjacência
         self.matrixTable = QTableWidget(self)
-        self.matrixTable.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)  # Desativa a edição
+        self.matrixTable.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
 
-        # Atualiza a folha de estilo para o QTableWidget e QHeaderView para garantir visibilidade da grade branca
         self.matrixTable.setStyleSheet("""
             QHeaderView::section {
                 background-color: transparent;  # Fundo transparente ou use #333333 para combinar com o tema
@@ -75,11 +74,9 @@ class Screen12(QDialog):
         self.matrixTable.setRowCount(num_vertices)
         self.matrixTable.setColumnCount(num_vertices)
 
-        # Define cabeçalhos das linhas e colunas
         self.matrixTable.setHorizontalHeaderLabels(vertices)
         self.matrixTable.setVerticalHeaderLabels(vertices)
 
-        # Ajusta o tamanho das células
         self.matrixTable.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.matrixTable.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
 
@@ -93,7 +90,6 @@ class Screen12(QDialog):
             if not isDirected:
                 adjacencyMatrix[idx2][idx1] = 1
 
-        # Preenche a tabela com a matriz
         for i, row in enumerate(adjacencyMatrix):
             for j, val in enumerate(row):
                 self.matrixTable.setItem(i, j, QTableWidgetItem(str(val)))
