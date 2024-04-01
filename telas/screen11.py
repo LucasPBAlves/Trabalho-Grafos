@@ -1,7 +1,7 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy, \
-    QMessageBox
-from PyQt6.QtCore import Qt, pyqtSignal
 from collections import defaultdict
+
+from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy
 
 from shared_state import SharedState
 
@@ -34,6 +34,10 @@ class Screen11(QDialog):
         buttonLayout.addItem(QSpacerItem(20, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum))
         layout.addLayout(buttonLayout)
 
+        self.resultLabel = QLabel("", self)
+        self.resultLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.resultLabel)
+
         layout.addItem(QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding))
 
         backButton = QPushButton("Voltar", self)
@@ -43,18 +47,15 @@ class Screen11(QDialog):
         self.setLayout(layout)
 
     def testIfGraphIsBipartite(self):
-        # Parse the edges from SharedState
         arestas_str = SharedState.get_aresta().split(';')
         graph = defaultdict(list)
         for aresta in arestas_str:
             v1, v2 = aresta.split('-')
             graph[v1].append(v2)
-            graph[v2].append(v1)  # Assuming the graph is undirected
+            graph[v2].append(v1)
 
-        # Initialize color for each vertex
         color = {vertex: -1 for vertex in graph}
 
-        # Function to check bipartite using DFS
         def isBipartiteDFS(pos, c):
             if color[pos] != -1 and color[pos] != c:
                 return False
@@ -73,9 +74,9 @@ class Screen11(QDialog):
                 bipartite &= isBipartiteDFS(vertex, 0)
 
         if bipartite:
-            QMessageBox.information(self, "Resultado", "O grafo é bipartido.")
+            self.resultLabel.setText("O grafo é bipartido.")
         else:
-            QMessageBox.information(self, "Resultado", "O grafo não é bipartido.")
+            self.resultLabel.setText("O grafo não é bipartido.")
 
 
 if __name__ == '__main__':

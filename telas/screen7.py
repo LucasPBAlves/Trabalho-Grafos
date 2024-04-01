@@ -1,9 +1,6 @@
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox, QSpacerItem,
-                             QSizePolicy, QHBoxLayout)
-
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QLineEdit, QMessageBox, QSpacerItem, QSizePolicy, QHBoxLayout
 from shared_state import SharedState
-
 
 class Screen7(QDialog):
     backSignal = pyqtSignal()
@@ -65,15 +62,10 @@ class Screen7(QDialog):
         degree = 0
 
         for aresta in arestas:
-            if isDirected:
-                if '->' in aresta:
-                    v1, v2 = aresta.split('->')
-                    if vertex in (v1, v2):
-                        degree += 1
-            else:
-                if '-' in aresta:
-                    v1, v2 = aresta.split('-')
-                    if vertex in (v1, v2):
-                        degree += 1
+            v1, v2 = aresta.split('-')
+            if vertex == v1:
+                degree += 1
+            if not isDirected and vertex == v2:
+                degree += 1
 
         self.degreeLabel.setText(f"O grau do vértice {vertex} é: {degree}")
