@@ -34,6 +34,12 @@ class Screen4(QWidget):
         self.addButton(mainLayout, "Testar se o grafo é regular", 9)
         self.addButton(mainLayout, "Testar se o grafo é completo", 10)
         self.addButton(mainLayout, "Testar se o grafo é bipartido", 11)
+        self.addButton(mainLayout, "Busca em largura", 14)
+        self.addButton(mainLayout, "Busca em profundidade", 15)
+        self.addButton(mainLayout, "Ordenação Topológica", 16)
+        self.addButton(mainLayout, "Árvore Geradora Mínima (AGM)", 17)
+        self.addButton(mainLayout, "Testar se o grafo é conexo", 18)
+        self.addButton(mainLayout, "Identificar o caminho mínimo entre dois vértices", 19)
         self.addButton(mainLayout, "Representação de grafos utilizando Matriz de Adjacência", 12)
         self.addButton(mainLayout, "Representação de grafos utilizando Lista de Adjacência", 13)
 
