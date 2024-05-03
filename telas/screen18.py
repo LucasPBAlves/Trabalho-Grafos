@@ -62,6 +62,7 @@ class Screen18(QDialog):
 
     def testConexo(self):
         arestas = SharedState.get_aresta().split(';')
+        direto = SharedState.get_is_directed
         adjacencia = defaultdict(list)
 
         # Construir lista de adjacência
@@ -75,15 +76,17 @@ class Screen18(QDialog):
         # Função para fazer busca em profundidade
         def dfs(vertice):
             visitados.add(vertice)
-            for vizinho in adjacencia[vertice]:
-                if vizinho not in visitados:
-                    dfs(vizinho)
+            for vertice in adjacencia.keys():
+                if vertice not in visitados:
+                    dfs(vertice)
 
         # Executar busca em profundidade a partir de um vértice
         vertice_inicial = next(iter(adjacencia.keys()))
         dfs(vertice_inicial)
 
         # Verificar se todos os vértices foram visitados
+        numero_components = len(set(visitados))
+        
         if len(visitados) == len(adjacencia):
             self.resultLabel.setText("O grafo é conexo.")
         else:
