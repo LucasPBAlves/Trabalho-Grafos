@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QTableWidget, QTableWidgetItem, \
-    QHeaderView, QSpacerItem, QSizePolicy
+    QHeaderView, QSpacerItem, QSizePolicy, QMessageBox
 
 from shared_state import SharedState
 from styles import DARK_THEME_STYLE
@@ -51,6 +51,7 @@ class Screen13(QDialog):
     def generateAdjacencyList(self):
         arestas_str = SharedState.get_aresta()
         if not arestas_str:
+            QMessageBox.warning(self, "Aviso", "Não há arestas definidas no grafo.")
             self.adjacencyListTable.setRowCount(0)
             self.adjacencyListTable.setColumnCount(0)
             return
@@ -60,10 +61,13 @@ class Screen13(QDialog):
         vertices = {}
 
         for aresta in arestas:
-            v1, v2 = aresta.split('-')
-            vertices.setdefault(v1, []).append(v2)
-            if not isDirected:
-                vertices.setdefault(v2, []).append(v1)
+            try:
+                v1, v2, weight = aresta.split('-')
+                vertices.setdefault(v1, []).append(f"{v2} ({weight})")
+                if not isDirected:
+                    vertices.setdefault(v2, []).append(f"{v1} ({weight})")
+            except ValueError:
+                QMessageBox.warning(self, "Erro de Formato", f"A aresta '{aresta}' não está no formato correto.")
 
         self.adjacencyListTable.setRowCount(len(vertices))
         self.adjacencyListTable.setColumnCount(2)
@@ -72,3 +76,13 @@ class Screen13(QDialog):
         for i, (vertex, adj_list) in enumerate(vertices.items()):
             self.adjacencyListTable.setItem(i, 0, QTableWidgetItem(vertex))
             self.adjacencyListTable.setItem(i, 1, QTableWidgetItem(", ".join(adj_list)))
+
+
+if __name__ == '__main__':
+    import sys
+    from PyQt6.QtWidgets import QApplication
+
+    app = QApplication(sys.argv)
+    screen = Screen13()
+    screen.show()
+    sys.exit(app.exec())

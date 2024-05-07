@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QHeaderView
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QTableWidget, QTableWidgetItem, QHeaderView, QMessageBox
 
 from shared_state import SharedState
 from styles import DARK_THEME_STYLE
@@ -58,16 +58,19 @@ class Screen12(QDialog):
         isDirected = SharedState.get_is_directed()
 
         if not arestas_str:
-            print('Erro: Arestas não definidas')
+            QMessageBox.warning(self, "Aviso", "Não há arestas definidas no grafo.")
             return
 
         arestas = arestas_str.split(';')
         vertices = set()
 
         for aresta in arestas:
-            v1, v2 = aresta.split('-')
-            vertices.add(v1)
-            vertices.add(v2)
+            try:
+                v1, v2, _ = aresta.split('-')
+                vertices.add(v1)
+                vertices.add(v2)
+            except ValueError:
+                QMessageBox.warning(self, "Erro de Formato", f"A aresta '{aresta}' não está no formato correto.")
 
         vertices = sorted(list(vertices))
         num_vertices = len(vertices)
@@ -84,11 +87,14 @@ class Screen12(QDialog):
         adjacencyMatrix = [[0] * num_vertices for _ in range(num_vertices)]
 
         for aresta in arestas:
-            v1, v2 = aresta.split('-')
-            idx1, idx2 = vertex_to_index[v1], vertex_to_index[v2]
-            adjacencyMatrix[idx1][idx2] = 1
-            if not isDirected:
-                adjacencyMatrix[idx2][idx1] = 1
+            try:
+                v1, v2, weight = aresta.split('-')
+                idx1, idx2 = vertex_to_index[v1], vertex_to_index[v2]
+                adjacencyMatrix[idx1][idx2] = weight
+                if not isDirected:
+                    adjacencyMatrix[idx2][idx1] = weight
+            except ValueError:
+                QMessageBox.warning(self, "Erro de Formato", f"A aresta '{aresta}' não está no formato correto.")
 
         for i, row in enumerate(adjacencyMatrix):
             for j, val in enumerate(row):

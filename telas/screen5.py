@@ -62,9 +62,16 @@ class Screen5(QDialog):
 
         arestas = SharedState.get_aresta()
         neighborhood = set()
-        for aresta in arestas.split(';'):
-            v1, v2 = aresta.split('-')
-            if v1 == vertex or v2 == vertex:
-                neighborhood.add(v1 if v1 != vertex else v2)
 
-        self.neighborhoodLabel.setText(f"Vizinhança de {vertex}: {', '.join(sorted(neighborhood))}")
+        for aresta in arestas.split(';'):
+            try:
+                v1, v2, _ = aresta.split('-')
+                if v1 == vertex or v2 == vertex:
+                    neighborhood.add(v1 if v1 != vertex else v2)
+            except ValueError:
+                QMessageBox.warning(self, "Erro de Formato", f"A aresta '{aresta}' não está no formato correto.")
+
+        if neighborhood:
+            self.neighborhoodLabel.setText(f"Vizinhança de {vertex}: {', '.join(sorted(neighborhood))}")
+        else:
+            self.neighborhoodLabel.setText(f"Vértice {vertex} não encontrado.")

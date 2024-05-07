@@ -4,7 +4,6 @@ from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QSpacerIt
 
 from shared_state import SharedState
 
-
 class Screen8(QDialog):
     backSignal = pyqtSignal()
 
@@ -52,26 +51,30 @@ class Screen8(QDialog):
             return
 
         arestas = arestas_str.split(';')
-        vertices = set()
+        arestas_set = set()
         simple = True
-        for aresta in arestas:
-            v1, v2 = aresta.split('-')
-            if v1 == v2:  # Detecta um laço
-                simple = False
-                break
-            if arestas.count(aresta) > 1:  # Detecta arestas paralelas
-                simple = False
-                break
-            vertices.add(frozenset([v1, v2]))
 
-        if len(vertices) != len(arestas):  # Detecta arestas paralelas de forma indireta
-            simple = False
+        for aresta in arestas:
+            try:
+                v1, v2, _ = aresta.split('-')
+                if v1 == v2:  # Detecta um laço
+                    simple = False
+                    break
+
+                # Usamos um conjunto imutável para representar uma aresta não orientada
+                aresta_conjunto = frozenset([v1, v2])
+                if aresta_conjunto in arestas_set:
+                    simple = False
+                    break
+
+                arestas_set.add(aresta_conjunto)
+            except ValueError:
+                QMessageBox.warning(self, "Erro de Formato", f"A aresta '{aresta}' não está no formato correto.")
 
         if simple:
             self.resultLabel.setText("O grafo é simples.")
         else:
             self.resultLabel.setText("O grafo não é simples.")
-
 
 if __name__ == '__main__':
     import sys

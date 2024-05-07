@@ -1,11 +1,8 @@
 import itertools
-
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy, \
-    QMessageBox
-
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, \
+    QSizePolicy, QMessageBox
 from shared_state import SharedState
-
 
 class Screen10(QDialog):
     backSignal = pyqtSignal()
@@ -60,14 +57,20 @@ class Screen10(QDialog):
 
         arestas = arestas_str.split(';')
         vertices = set()
+        aresta_dict = set()
+
         for aresta in arestas:
-            v1, v2 = aresta.split('-')
-            vertices.add(v1)
-            vertices.add(v2)
+            try:
+                v1, v2, _ = aresta.split('-')
+                vertices.add(v1)
+                vertices.add(v2)
+                aresta_dict.add(frozenset([v1, v2]))
+            except ValueError:
+                QMessageBox.warning(self, "Erro de Formato", f"A aresta '{aresta}' não está no formato correto.")
 
         is_complete = True
         for v1, v2 in itertools.combinations(vertices, 2):
-            if f"{v1}-{v2}" not in arestas and f"{v2}-{v1}" not in arestas:
+            if frozenset([v1, v2]) not in aresta_dict:
                 is_complete = False
                 break
 
@@ -75,3 +78,12 @@ class Screen10(QDialog):
             self.resultLabel.setText("O grafo é completo.")
         else:
             self.resultLabel.setText("O grafo não é completo.")
+
+if __name__ == '__main__':
+    import sys
+    from PyQt6.QtWidgets import QApplication
+
+    app = QApplication(sys.argv)
+    screen = Screen10()
+    screen.show()
+    sys.exit(app.exec())

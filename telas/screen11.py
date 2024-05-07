@@ -1,10 +1,7 @@
 from collections import defaultdict
-
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy
-
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy, QMessageBox
 from shared_state import SharedState
-
 
 class Screen11(QDialog):
     backSignal = pyqtSignal()
@@ -47,12 +44,21 @@ class Screen11(QDialog):
         self.setLayout(layout)
 
     def testIfGraphIsBipartite(self):
-        arestas_str = SharedState.get_aresta().split(';')
+        arestas_str = SharedState.get_aresta()
+        if not arestas_str:
+            QMessageBox.warning(self, "Aviso", "Não há arestas definidas no grafo.")
+            return
+
+        arestas = arestas_str.split(';')
         graph = defaultdict(list)
-        for aresta in arestas_str:
-            v1, v2 = aresta.split('-')
-            graph[v1].append(v2)
-            graph[v2].append(v1)
+
+        for aresta in arestas:
+            try:
+                v1, v2, _ = aresta.split('-')
+                graph[v1].append(v2)
+                graph[v2].append(v1)
+            except ValueError:
+                QMessageBox.warning(self, "Erro de Formato", f"A aresta '{aresta}' não está no formato correto.")
 
         color = {vertex: -1 for vertex in graph}
 
@@ -77,7 +83,6 @@ class Screen11(QDialog):
             self.resultLabel.setText("O grafo é bipartido.")
         else:
             self.resultLabel.setText("O grafo não é bipartido.")
-
 
 if __name__ == '__main__':
     import sys

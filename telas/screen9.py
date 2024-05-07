@@ -1,11 +1,9 @@
 from collections import defaultdict
-
 from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, \
-    QSizePolicy
+    QSizePolicy, QMessageBox
 
 from shared_state import SharedState
-
 
 class Screen9(QDialog):
     backSignal = pyqtSignal()
@@ -60,13 +58,21 @@ class Screen9(QDialog):
         self.setLayout(layout)
 
     def testRegularity(self):
-        arestas = SharedState.get_aresta().split(';')
+        arestas_str = SharedState.get_aresta()
+        if not arestas_str:
+            QMessageBox.warning(self, "Aviso", "Não há arestas definidas no grafo.")
+            return
+
+        arestas = arestas_str.split(';')
         grau_vertices = defaultdict(int)
 
         for aresta in arestas:
-            v1, v2 = aresta.split('-')
-            grau_vertices[v1] += 1
-            grau_vertices[v2] += 1
+            try:
+                v1, v2, _ = aresta.split('-')
+                grau_vertices[v1] += 1
+                grau_vertices[v2] += 1
+            except ValueError:
+                QMessageBox.warning(self, "Erro de Formato", f"A aresta '{aresta}' não está no formato correto.")
 
         graus = set(grau_vertices.values())
 
@@ -74,3 +80,12 @@ class Screen9(QDialog):
             self.resultLabel.setText(f"O grafo é regular com grau {graus.pop()}.")
         else:
             self.resultLabel.setText("O grafo não é regular.")
+
+if __name__ == '__main__':
+    import sys
+    from PyQt6.QtWidgets import QApplication
+
+    app = QApplication(sys.argv)
+    screen = Screen9()
+    screen.show()
+    sys.exit(app.exec())

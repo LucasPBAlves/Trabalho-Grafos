@@ -10,19 +10,19 @@ class Screen3(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Criação e remoção de arestas")
+        self.setWindowTitle("Criação e Remoção de Arestas")
         self.setGeometry(100, 100, 600, 400)
         self.edges = []  # Lista para armazenar as arestas
         self.uniqueVertices = set()  # Conjunto para armazenar vértices únicos
         self.vertices = SharedState.get_vertices_count()  # Total de vértices permitidos
         self.isDirected = SharedState.get_is_directed()
-        self.edgesString = ""  # String para salvar os vértices adicionados
+        self.edgesString = ""  # String para salvar as arestas adicionadas
         self.initUI()
 
     def initUI(self):
         layout = QVBoxLayout(self)
 
-        label = QLabel("Criação e remoção de arestas", self)
+        label = QLabel("Criação e Remoção de Arestas", self)
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(label)
 
@@ -41,6 +41,10 @@ class Screen3(QDialog):
         self.vertex2Input = QLineEdit(self)
         self.vertex2Input.setPlaceholderText("Vértice 2")
         inputLayout.addWidget(self.vertex2Input)
+
+        self.weightInput = QLineEdit(self)
+        self.weightInput.setPlaceholderText("Peso (Padrão: 1)")
+        inputLayout.addWidget(self.weightInput)
 
         layout.addLayout(inputLayout)
 
@@ -67,11 +71,15 @@ class Screen3(QDialog):
     def addEdge(self):
         v1 = self.vertex1Input.text().strip()
         v2 = self.vertex2Input.text().strip()
+        weight = self.weightInput.text().strip() or "1"  # Preencha com "1" se estiver vazio
+
         if not v1 or not v2:
             QMessageBox.warning(self, "Entrada Inválida", "Por favor, insira ambos os vértices para a aresta.")
             return
+
+        edgeStringFormat = f"{v1}-{v2}-{weight}"
         edge = f"{v1}->{v2}" if self.isDirected or v1 <= v2 else f"{v2}->{v1}"
-        edgeStringFormat = f"{v1}-{v2}"
+
         if edge in self.edges or (not self.isDirected and f"{v2}->{v1}" in self.edges):
             QMessageBox.warning(self, "Aresta Duplicada", "Esta aresta já foi adicionada ou é inválida.")
             return
@@ -83,6 +91,7 @@ class Screen3(QDialog):
         self.remainingVerticesLabel.setText(f"Vértices restantes: {self.vertices - len(self.uniqueVertices)}")
         self.vertex1Input.clear()
         self.vertex2Input.clear()
+        self.weightInput.clear()
         self.checkIfComplete()
 
     def removeSelectedEdge(self):
@@ -99,7 +108,7 @@ class Screen3(QDialog):
         self.checkIfComplete()
 
     def updateUniqueVerticesAfterRemoval(self, v1, v2):
-        # Remova vértices de self.uniqueVertices se não estão mais em nenhuma aresta
+        # Remove vértices de `self.uniqueVertices` se não estiverem mais em nenhuma aresta
         self.uniqueVertices = {v.split("->")[0] for v in self.edges}.union({v.split("->")[1] for v in self.edges})
         self.remainingVerticesLabel.setText(f"Vértices restantes: {self.vertices - len(self.uniqueVertices)}")
 

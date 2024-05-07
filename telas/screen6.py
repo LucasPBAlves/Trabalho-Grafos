@@ -63,15 +63,20 @@ class Screen6(QDialog):
         if not vertex:
             QMessageBox.warning(self, "Entrada Inválida", "Por favor, insira o vértice.")
             return
+
         arestas = SharedState.get_aresta()
         successors = set()
         predecessors = set()
+
         for aresta in arestas.split(';'):
-            if '-' in aresta:
-                v1, v2 = aresta.split('-')
+            try:
+                v1, v2, _ = aresta.split('-')
                 if v1 == vertex:
                     successors.add(v2)
                 if v2 == vertex:
                     predecessors.add(v1)
-        self.successorsLabel.setText(f"Sucessores de {vertex}: {', '.join(successors)}")
-        self.predecessorsLabel.setText(f"Predecessores de {vertex}: {', '.join(predecessors)}")
+            except ValueError:
+                QMessageBox.warning(self, "Erro de Formato", f"A aresta '{aresta}' não está no formato correto.")
+
+        self.successorsLabel.setText(f"Sucessores de {vertex}: {', '.join(sorted(successors))}")
+        self.predecessorsLabel.setText(f"Predecessores de {vertex}: {', '.join(sorted(predecessors))}")

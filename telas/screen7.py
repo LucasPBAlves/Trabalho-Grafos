@@ -62,10 +62,13 @@ class Screen7(QDialog):
         degree = 0
 
         for aresta in arestas:
-            v1, v2 = aresta.split('-')
-            if vertex == v1:
-                degree += 1
-            if not isDirected and vertex == v2:
-                degree += 1
+            try:
+                v1, v2, _ = aresta.split('-')
+                if vertex == v1:
+                    degree += 1
+                if not isDirected and vertex == v2:
+                    degree += 1
+            except ValueError:
+                QMessageBox.warning(self, "Erro de Formato", f"A aresta '{aresta}' não está no formato correto.")
 
         self.degreeLabel.setText(f"O grau do vértice {vertex} é: {degree}")
