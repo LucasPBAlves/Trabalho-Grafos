@@ -21,11 +21,11 @@ from telas.screen11 import Screen11
 from telas.screen12 import Screen12
 from telas.screen13 import Screen13
 from telas.screen14 import Screen14
-#from telas.screen15 import Screen15
+from telas.screen15 import Screen15
 from telas.screen16 import Screen16
 from telas.screen17 import Screen17
 from telas.screen18 import Screen18
-
+#from telas.screen19 import Screen19
 
 
 def not_implemented_yet():
@@ -141,7 +141,10 @@ class MainWindow(QMainWindow):
 
         elif screen_id == 14:
             self.prepare_screen14()
-       
+
+        elif screen_id == 15:
+            self.prepare_screen15()
+
         elif screen_id == 16:
             self.prepare_screen16()
             
@@ -221,6 +224,12 @@ class MainWindow(QMainWindow):
             self.stackedWidget.addWidget(self.screen14)
         self.stackedWidget.setCurrentWidget(self.screen14)
 
+    def prepare_screen15(self):
+        if not hasattr(self, 'screen15'):
+            self.screen15 = Screen15()
+            self.screen15.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
+            self.stackedWidget.addWidget(self.screen15)
+        self.stackedWidget.setCurrentWidget(self.screen15)
     def prepare_screen16(self):
                 if not hasattr(self, 'screen16'):
                     self.screen16 = Screen16()
