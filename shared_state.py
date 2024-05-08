@@ -3,6 +3,7 @@ class SharedState:
     vertices_count = 0
     is_directed = False  # Adicionado novo atributo
     arestas = []
+  
 
     @staticmethod
     def get_instance():
@@ -39,3 +40,5 @@ class SharedState:
     def get_aresta(cls):
         print("Get Aresta", cls.arestas)
         return cls.arestas
+    
+            

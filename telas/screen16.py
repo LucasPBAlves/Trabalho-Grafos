@@ -58,9 +58,14 @@ class Screen16(QDialog):
 
     def Ordenacao_topologica(self):
         arestas_str = SharedState.get_aresta()
+        direto = SharedState.get_is_directed()
         if not arestas_str:
             QMessageBox.warning(self, "Erro", "Não há arestas definidas.")
             return
+        
+        if not direto:
+              QMessageBox.warning(self, "Erro", "Não é um grafo direcionado, ordenação topológica só funciona em grafo direcionado")
+              return
 
         arestas = arestas_str.split(';')
         adjacencia = defaultdict(list)
