@@ -8,10 +8,6 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QPu
 from styles import DARK_THEME_STYLE
 # Importações das telas
 from telas.screen1 import Screen1
-from telas.screen10 import Screen10
-from telas.screen11 import Screen11
-from telas.screen12 import Screen12
-from telas.screen13 import Screen13
 from telas.screen2 import Screen2
 from telas.screen3 import Screen3
 from telas.screen4 import Screen4
@@ -20,6 +16,12 @@ from telas.screen6 import Screen6
 from telas.screen7 import Screen7
 from telas.screen8 import Screen8
 from telas.screen9 import Screen9
+from telas.screen10 import Screen10
+from telas.screen11 import Screen11
+from telas.screen12 import Screen12
+from telas.screen13 import Screen13
+from telas.screen14 import Screen14
+#from telas.screen15 import Screen15
 from telas.screen16 import Screen16
 from telas.screen17 import Screen17
 from telas.screen18 import Screen18
@@ -136,6 +138,9 @@ class MainWindow(QMainWindow):
         
         elif screen_id == 13:
             self.prepare_screen13()
+
+        elif screen_id == 14:
+            self.prepare_screen14()
        
         elif screen_id == 16:
             self.prepare_screen16()
@@ -208,6 +213,13 @@ class MainWindow(QMainWindow):
             self.screen13.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
             self.stackedWidget.addWidget(self.screen13)
         self.stackedWidget.setCurrentWidget(self.screen13)
+
+    def prepare_screen14(self):
+        if not hasattr(self, 'screen14'):
+            self.screen14 = Screen14()
+            self.screen14.backSignal.connect(lambda: self.goto_screen(self.stackedWidget.indexOf(self.screen4)))
+            self.stackedWidget.addWidget(self.screen14)
+        self.stackedWidget.setCurrentWidget(self.screen14)
 
     def prepare_screen16(self):
                 if not hasattr(self, 'screen16'):
