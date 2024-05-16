@@ -1,8 +1,8 @@
 from collections import defaultdict
 
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, \
-    QSizePolicy, QMessageBox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QPushButton, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy, \
+    QMessageBox
 
 from shared_state import SharedState
 
@@ -57,44 +57,50 @@ class Screen18(QDialog):
         self.setLayout(layout)
 
     def testConexo(self):
-        arestas_str = SharedState.get_aresta()
-        if not arestas_str:
-            QMessageBox.warning(self, "Erro", "Não há arestas definidas.")
-            return
-
-        direto = SharedState.get_is_directed()
+        arestas = SharedState.get_aresta().split(';')
+        isDirected = SharedState.get_is_directed()
         adjacencia = defaultdict(list)
 
         # Construir lista de adjacência
-        for aresta in arestas_str.split(';'):
-            try:
-                v1, v2, _ = aresta.split('-')  # Peso ignorado, pois não é relevante aqui
-                adjacencia[v1].append(v2)
-                if not direto:
-                    adjacencia[v2].append(v1)
-            except ValueError:
-                QMessageBox.warning(self, "Erro de Formato", f"A aresta '{aresta}' não está no formato correto.")
-
-        if not adjacencia:
-            self.resultLabel.setText("O grafo não possui vértices ou arestas.")
-            return
+        for aresta in arestas:
+            v1, v2, _ = aresta.split('-')
+            adjacencia[v1].append(v2)
+            if not isDirected:
+                adjacencia[v2].append(v1)
 
         visitados = set()
 
         # Função para fazer busca em profundidade
-        def dfs(vertice):
+        def dfs(vertice, graph):
             visitados.add(vertice)
-            for vizinho in adjacencia[vertice]:
+            for vizinho in graph[vertice]:
                 if vizinho not in visitados:
-                    dfs(vizinho)
+                    dfs(vizinho, graph)
 
-        # Executar busca em profundidade a partir de um vértice
-        vertice_inicial = next(iter(adjacencia.keys()))
-        dfs(vertice_inicial)
+        vertices = list(adjacencia.keys())
+        if vertices:
+            vertice_inicial = vertices[0]
+            dfs(vertice_inicial, adjacencia)
 
         # Verificar se todos os vértices foram visitados
         if len(visitados) == len(adjacencia):
-            self.resultLabel.setText("O grafo é conexo.")
+            if not isDirected:
+                self.resultLabel.setText("O grafo é conexo.")
+            else:
+                # Para grafos direcionados, verificar se o grafo é fracamente conexo
+                # Inverter as arestas e verificar a conectividade novamente
+                adjacencia_inversa = defaultdict(list)
+                for v1 in adjacencia:
+                    for v2 in adjacencia[v1]:
+                        adjacencia_inversa[v2].append(v1)
+
+                visitados.clear()
+                dfs(vertice_inicial, adjacencia_inversa)
+
+                if len(visitados) == len(adjacencia):
+                    self.resultLabel.setText("O grafo é fracamente conexo.")
+                else:
+                    self.resultLabel.setText("O grafo não é conexo.")
         else:
             self.resultLabel.setText("O grafo não é conexo.")
 
